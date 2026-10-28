@@ -259,7 +259,7 @@ footer{text-align:center;color:var(--muted);font-size:.76rem;padding:6px 0 0}
 </div>
 
 <details class="card limits"><summary>Lưu ý về dữ liệu</summary><ul>
- <li>Loại thầu và nhóm sản phẩm được phân theo từ khóa trong tên gói và tên hàng, có thể chưa chính xác với gói gộp nhiều loại hàng.</li>
+ <li>Loại thầu được phân theo <b>danh mục hàng hóa</b> của từng gói: chỉ mặt hàng là máy, thiết bị, hệ thống mới tính là Thiết bị; còn lại là Hóa chất hoặc Vật tư. Gói có nhiều loại hàng sẽ hiện nhiều nhãn, và lọc theo loại nào cũng thấy.</li>
  <li>Nguồn là muasamcong. Một số gói (ví dụ chào giá rút gọn) không công khai danh sách hàng hóa hoặc tên nhà thầu nên chỉ có giá mức gói.</li>
  <li>Gói gắn nhãn <b>Mở rộng</b> được lấy theo bên mời thầu là đơn vị y tế (bệnh viện, trung tâm y tế, CDC, trung tâm chẩn đoán, viện kiểm nghiệm, viện huyết học...) và tên gói có hóa chất, sinh phẩm, vật tư hoặc thiết bị y tế. Dùng ô Phạm vi để lọc riêng.</li>
  <li>Với gói quan trọng, hãy bấm mã TBMT để mở lại trên hệ thống và xác nhận.</li>
@@ -278,7 +278,7 @@ const LC={'Thiết bị':'l-tb','Hóa chất':'l-hc','Vật tư':'l-vt','Thuốc
 const linkOf=(no,lk)=>{const [id,inp,form]=lk.split('|');const q=new URLSearchParams({p_p_id:'egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2',p_p_lifecycle:'0',p_p_state:'normal',p_p_mode:'view',_egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2_render:'detail-v2',type:'es-notify-contractor',stepCode:inp?'notify-contractor-step-4-kqlcnt':'notify-contractor-step-1-tbmt',step:'tbmt',id:id,notifyId:id,inputResultId:inp||'undefined',bidInviteId:'undefined',notifyNo:no,planNo:'undefined',isInternet:'1',processApply:'LDT',bidMode:'1_MTHS',bidForm:form||''});const a=document.createElement('a');a.href='https://muasamcong.mof.gov.vn/web/guest/contractor-selection?'+q;a.target='_blank';a.rel='noopener';a.textContent=no;return a};
 const noCell=(r)=>{const td=el('td','mono');td.dataset.k='no';if(r.lk)td.append(linkOf(r.notifyNo,r.lk));else td.textContent=tx(r.notifyNo);if(Q()&&r.day)td.append(el('span','dayof','ngày '+vnDate(r.day)));return td};
 const invCell=(r)=>{const td=el('td','inv');td.dataset.k='inv';if(isNil(r.investor)){td.textContent='—';return td}const s=el('span','inv-link',r.investor);s.title='Xem mọi gói của bên mời thầu này';s.addEventListener('click',()=>{$('f-q').value=r.investor;draw();$('toolbar').scrollIntoView({block:'start'})});td.append(s);return td};
-const tagCell=(r)=>{const td=el('td');td.dataset.k='tag';if(r.mr){const c=el('span','chip l-mr','Mở rộng');c.title='Gói lấy theo đơn vị y tế (bệnh viện, TTYT, CDC...), không chứa từ khóa xét nghiệm trong tên';td.append(c)}if(r.loai)td.append(el('span','chip '+(LC[r.loai]||'l-kh'),r.loai));String(r.sanpham||'').split(', ').filter((s)=>s&&s!=='Khác').forEach((s)=>td.append(el('span','sp',s)));return td};
+const tagCell=(r)=>{const td=el('td');td.dataset.k='tag';if(r.mr){const c=el('span','chip l-mr','Mở rộng');c.title='Gói lấy theo đơn vị y tế (bệnh viện, TTYT, CDC...), không chứa từ khóa xét nghiệm trong tên';td.append(c)}String(r.loai||'').split(', ').filter(Boolean).forEach((t)=>td.append(el('span','chip '+(LC[t]||'l-kh'),t)));String(r.sanpham||'').split(', ').filter((s)=>s&&s!=='Khác').forEach((s)=>td.append(el('span','sp',s)));return td};
 const txtCell=(v,k,cls,label)=>{const td=el('td',cls,tx(v));td.dataset.k=k;if(label)td.dataset.l=label;return td};
 const priceCell=(v,label,budget)=>{const td=el('td','num price');td.dataset.k='meta';td.dataset.l=label;td.append(document.createTextNode(fmt(v)));if(budget&&v&&budget>v){td.append(el('span','save','−'+Math.round((1-v/budget)*100)+'% dự toán'))}return td};
 const emptyRow=(n,msg)=>{const tr=el('tr','empty');const td=el('td',null,msg);td.colSpan=n;tr.append(td);return tr};
@@ -294,7 +294,7 @@ const ch5Cell=(r,x)=>{const td=el('td');td.dataset.k='dl';const f=formOf(r),u=ur
  td.append(el('span','noc5','—'));return td};
 const Q=()=>$('f-q').value.trim().toLowerCase();
 const norm=(t)=>String(t||'').toLowerCase();
-const pass=(r)=>{const l=$('f-loai').value,s=$('f-sp').value,q=Q();if(q){if(![r.notifyNo,r.investor,r.name,r.winner].map(norm).join(' | ').includes(q))return false}else if(r.day!==undefined&&r.day!==curDay)return false;const mr=$('f-mr').value;if(mr==='kw'&&r.mr)return false;if(mr==='mr'&&!r.mr)return false;return (!l||r.loai===l)&&(!s||String(r.sanpham||'').split(', ').includes(s))};
+const pass=(r)=>{const l=$('f-loai').value,s=$('f-sp').value,q=Q();if(q){if(![r.notifyNo,r.investor,r.name,r.winner].map(norm).join(' | ').includes(q))return false}else if(r.day!==undefined&&r.day!==curDay)return false;const mr=$('f-mr').value;if(mr==='kw'&&r.mr)return false;if(mr==='mr'&&!r.mr)return false;return (!l||String(r.loai||'').split(', ').includes(l))&&(!s||String(r.sanpham||'').split(', ').includes(s))};
 const todayStr=()=>{const d=new Date(Date.now()+7*3600e3);return d.toISOString().slice(0,10)};
 const nowMin=()=>{const d=new Date(Date.now()+7*3600e3);return d.getUTCHours()*60+d.getUTCMinutes()};
 
