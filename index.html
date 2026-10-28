@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Theo dõi dữ liệu đấu thầu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+:root{--bg:#faf9f5;--panel:#fff;--fg:#1f1e1d;--muted:#6b6a65;--line:#e4e1d8;--accent:#c96442}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1a18;--panel:#262523;--fg:#f2f0ea;--muted:#a3a097;--line:#3a3835;--accent:#e08a6a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 "Be Vietnam Pro","Segoe UI",Roboto,Arial,"Helvetica Neue",sans-serif}
+.wrap{max-width:1280px;margin:0 auto;padding:24px 16px;display:flex;flex-direction:column;gap:20px}
+h1{font-family:"Be Vietnam Pro","Segoe UI",Roboto,Arial,"Helvetica Neue",sans-serif;font-weight:600;font-size:1.8rem;margin:0}
+h2{font-size:1.1rem;margin:0 0 4px}
+.sub,.note{color:var(--muted);margin:4px 0 12px;font-size:.85rem}
+a{color:var(--accent)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:12px}
+.kpi,.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.kpi b{display:block;font-family:"Be Vietnam Pro","Segoe UI",Roboto,Arial,"Helvetica Neue",sans-serif;font-weight:600;font-size:2rem}
+.kpi span{color:var(--muted)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button,select,input{font-family:inherit;font-size:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+button{cursor:pointer}
+button[aria-selected=true]{background:var(--fg);color:var(--bg)}
+label{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:.85rem}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:820px;font-size:.85rem}
+th{text-align:left;color:var(--muted);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td:first-child{white-space:nowrap}tr.gr>td{padding:4px 10px 16px 24px;white-space:normal}tr.gr summary{cursor:pointer;color:var(--muted);font-size:.82rem;margin-bottom:6px}table.inner{min-width:700px;font-size:.8rem}table.inner td:first-child{white-space:normal}#b-equip td:first-child{white-space:normal;min-width:5.5rem}.sub{color:var(--muted);font-size:.78rem;margin-top:2px}#b-equip td{overflow-wrap:anywhere}#b-equip{font-size:.82rem}.num{text-align:right;white-space:nowrap}
+ul{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:6px}
+[hidden]{display:none!important}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0f766e"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"></head>
+<body>
+<div class="wrap">
+<header>
+<h1>Theo dõi dữ liệu đấu thầu</h1>
+<p class="sub">Báo cáo ngày <b id="rp-date">—</b>, dữ liệu lúc <b id="rp-asof">—</b>, nguồn <a href="https://muasamcong.mof.gov.vn/" target="_blank" rel="noopener">muasamcong.mof.gov.vn</a>. Chọn ngày ở ô lịch để xem lại các ngày trước. Hãy mở lại gói quan trọng trên hệ thống để xác nhận.</p>
+</header>
+<div class="kpis">
+<div class="kpi"><b id="k-start">—</b><span>Gói bắt đầu trong ngày</span></div>
+<div class="kpi"><b id="k-close">—</b><span>Gói đóng thầu trong ngày</span></div>
+<div class="kpi"><b id="k-results">—</b><span>Kết quả đăng trong ngày</span></div>
+<div class="kpi"><b id="k-equip">—</b><span>Dòng hàng hóa trong bảng trúng thầu</span></div>
+</div>
+<div class="bar">
+<div class="bar" role="tablist"><button type="button" data-tab="today" aria-selected="true" id="tab-today">Hôm nay</button><button type="button" data-tab="award" aria-selected="false" id="tab-award">Giá trúng thầu</button></div>
+<div class="bar" id="g-day" style="gap:6px"><button type="button" id="day-prev" aria-label="Ngày trước">&lsaquo;</button><label>Ngày xem <input id="f-day" type="date"></label><button type="button" id="day-next" aria-label="Ngày sau">&rsaquo;</button><span id="day-info" class="note" style="margin:0"></span></div>
+<label id="l-loai">Loại thầu <select id="f-loai"><option value="">Tất cả</option><option>Thuốc</option><option>Hóa chất</option><option>Vật tư</option><option>Thiết bị</option><option>Khác</option></select></label>
+<label id="l-sp">Sản phẩm <select id="f-sp"><option value="">Tất cả</option><option>Huyết học</option><option>Sinh hóa</option><option>Điện giải</option><option>Khí máu</option><option>Miễn dịch</option><option>Nước tiểu</option><option>Đông máu</option><option>Máu lắng</option><option>Ngưng tập tiểu cầu</option><option>Nội kiểm</option><option>HP hơi thở</option><option>Sinh học phân tử</option><option>Nhóm máu</option><option>Khác</option></select></label>
+</div>
+
+<div id="pane-today" class="wrap" style="padding:0">
+<section class="card"><h2>1. Gói bắt đầu trong ngày</h2><p class="note">Theo thời điểm bắt đầu nhận hồ sơ dự thầu hoặc TBMT đăng trong ngày.</p>
+<div class="scroll"><table><thead><tr><th>Mã TBMT</th><th>Loại thầu</th><th>Sản phẩm</th><th>Tên gói thầu</th><th>Bên mời thầu</th><th>Bắt đầu</th><th>Đóng thầu</th></tr></thead><tbody id="b-start"></tbody></table></div></section>
+<section class="card"><h2>2. Gói đóng thầu trong ngày</h2><p class="note">Sắp theo giờ đóng tăng dần.</p>
+<div class="scroll"><table><thead><tr><th>Giờ đóng</th><th>Mã TBMT</th><th>Loại thầu</th><th>Sản phẩm</th><th>Tên gói thầu</th><th>Bên mời thầu</th></tr></thead><tbody id="b-close"></tbody></table></div></section>
+<section class="card"><h2>3. Kết quả lựa chọn nhà thầu đăng trong ngày</h2><p class="note">Giá tính bằng đồng cho cả gói. Dưới mỗi gói là danh sách hàng hóa trúng thầu: tên hàng, ký mã hiệu, hãng, xuất xứ, số lượng, đơn giá và nhà thầu trúng của từng lô.</p>
+<div class="scroll"><table><thead><tr><th>Mã TBMT</th><th>Loại thầu</th><th>Sản phẩm</th><th>Tên gói thầu</th><th>Bên mời thầu</th><th>Nhà thầu trúng</th><th class="num">Giá trúng</th><th class="num">Dự toán</th></tr></thead><tbody id="b-results"></tbody></table></div></section>
+</div>
+
+<div id="pane-award" class="wrap" style="padding:0" hidden>
+<section class="card"><h2>Hàng hóa trúng thầu 12 tháng gần nhất</h2><p class="note">Máy, hóa chất, vật tư và thuốc trong cùng một bảng, lấy từ Danh sách hàng hóa của Kết quả lựa chọn nhà thầu. Gõ từ khóa hoặc chọn bộ lọc là có kết quả ngay. Giá là đơn giá trúng. Bấm mã TBMT để mở gói trên muasamcong.</p>
+<div class="bar" style="margin-bottom:12px"><label>Tìm kiếm <input id="a-q" type="search" placeholder="Tên hàng, model, ký mã hiệu, hãng, nhà thầu, bên mời thầu. Ví dụ: MEK-9200, C13 urea, ống máu lắng" style="min-width:22rem"></label>
+<label>Loại <select id="a-loai"><option value="">Tất cả</option><option>Thiết bị</option><option>Hóa chất</option><option>Vật tư</option><option>Thuốc</option></select></label>
+<label>Sản phẩm <select id="a-sp"><option value="">Tất cả</option><option>Huyết học</option><option>Sinh hóa</option><option>Điện giải</option><option>Khí máu</option><option>Miễn dịch</option><option>Nước tiểu</option><option>Đông máu</option><option>Máu lắng</option><option>Ngưng tập tiểu cầu</option><option>Nội kiểm</option><option>HP hơi thở</option><option>Sinh học phân tử</option><option>Nhóm máu</option><option>Tủy xương</option><option>Khác</option></select></label>
+<span id="a-count" class="note" style="margin:0"></span></div>
+<div class="scroll"><table><thead><tr><th>Ngày / Mã TBMT</th><th>Tên hàng hóa trúng thầu</th><th>Model / Ký mã hiệu</th><th>Hãng / Xuất xứ</th><th class="num">SL</th><th class="num">Đơn giá trúng</th><th>Bên mời thầu</th><th>Nhà thầu trúng</th></tr></thead><tbody id="b-all"></tbody></table></div></section>
+<section class="card"><h2>Giá trúng thầu theo gói</h2><p class="note" id="p-count"></p><p class="note">Các gói có kết quả đăng từ tháng 8, mới nhất ở trên. Giá là tổng cả gói.</p>
+<div class="scroll"><table><thead><tr><th>Ngày đăng KQ</th><th>Sản phẩm</th><th>Loại thầu</th><th>Mã TBMT</th><th>Tên gói thầu</th><th>Bên mời thầu</th><th>Nhà thầu trúng</th><th class="num">Giá trúng</th><th class="num">Dự toán</th></tr></thead><tbody id="b-award"></tbody></table></div></section>
+</div>
+
+<section class="card"><h2>Hạn chế</h2><ul>
+<li>Loại thầu và nhóm sản phẩm được phân theo từ khóa trong tên gói và tên máy, có thể chưa chính xác với gói gộp nhiều loại hàng.</li>
+<li>Nguồn là muasamcong. Trang dauthau.asia yêu cầu xác minh chống robot nên không tra cứu được.</li>
+<li>Bảng máy và bảng hóa chất/vật tư/thuốc lấy từ Danh sách hàng hóa của kết quả lựa chọn nhà thầu trong 12 tháng gần nhất. Một số gói (ví dụ chào giá rút gọn) không công khai danh sách hàng hóa nên chỉ có giá mức gói.</li>
+<li>Nhiều gói chào giá rút gọn không có tên nhà thầu trong dữ liệu công khai nên cột nhà thầu có thể trống.</li>
+</ul></section>
+</div>
+<script>
+const $=(i)=>document.getElementById(i);
+const fmt=(v)=>(v===null||v===undefined||v==='')?'không rõ':Number(v).toLocaleString('vi-VN');
+const tx=(v)=>(v===null||v===undefined||v==='')?'—':String(v);
+const D={};let curDay='';
+const linkOf=(no,lk)=>{const [id,inp,form]=lk.split('|');const q=new URLSearchParams({p_p_id:'egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2',p_p_lifecycle:'0',p_p_state:'normal',p_p_mode:'view',_egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2_render:'detail-v2',type:'es-notify-contractor',stepCode:'notify-contractor-step-4-kqlcnt',step:'tbmt',id:id,notifyId:id,inputResultId:inp||'undefined',notifyNo:no,processApply:'LDT',bidMode:'1_MTHS',bidForm:form});const a=document.createElement('a');a.href='https://muasamcong.mof.gov.vn/web/guest/contractor-selection?'+q;a.target='_blank';a.rel='noopener';a.textContent=no;return a};
+const pass=(r)=>{const l=$('f-loai').value,s=$('f-sp').value;if(r.day!==undefined&&r.day!==curDay)return false;
+ return (!l||r.loai===l)&&(!s||String(r.sanpham||'').split(', ').includes(s))};
+function resBody(rows){const tb=$('b-results');const out=rows.filter(pass);const cols=[['notifyNo',tx],['loai',tx],['sanpham',tx],['name',tx],['investor',tx],['winner',tx],['price',fmt,'num'],['budget',fmt,'num']];const frag=[];
+out.forEach((r)=>{const tr=document.createElement('tr');cols.forEach(([f,fn,cls])=>{const td=document.createElement('td');if(f==='notifyNo'&&r.lk)td.append(linkOf(r.notifyNo,r.lk));else td.textContent=fn(r[f]);if(cls)td.className=cls;tr.append(td)});frag.push(tr);
+ const gs=r.goods||[];const tr2=document.createElement('tr');tr2.className='gr';const td=document.createElement('td');td.colSpan=8;
+ if(!gs.length){const p=document.createElement('div');p.className='sub';p.textContent='Chưa lấy được danh sách hàng hóa của gói này (muasamcong không công khai hoặc chưa có dữ liệu). Bấm mã TBMT để xem trên hệ thống.';td.append(p)}
+ else{const det=document.createElement('details');det.open=gs.length<=12;const sm=document.createElement('summary');sm.textContent='Hàng hóa trúng thầu ('+gs.length+' mặt hàng)';det.append(sm);
+  const sc=document.createElement('div');sc.className='scroll';const tbl=document.createElement('table');tbl.className='inner';
+  tbl.innerHTML='<thead><tr><th>Tên hàng hóa</th><th>Model / Ký mã hiệu</th><th>Hãng / Xuất xứ</th><th class="num">SL</th><th class="num">Đơn giá trúng</th><th>Nhà thầu trúng</th></tr></thead>';
+  const tbd=document.createElement('tbody');gs.forEach((x)=>{const t=document.createElement('tr');
+   const c=(a,b)=>{const d=document.createElement('td');const d1=document.createElement('div');d1.textContent=a||'';d.append(d1);if(b){const d2=document.createElement('div');d2.className='sub';d2.textContent=b;d.append(d2)}return d};
+   t.append(c(x.item,''));t.append(c(x.model,x.kmh&&x.kmh!==x.model?x.kmh:''));t.append(c(x.hang,x.xuatxu));
+   const a=document.createElement('td');a.className='num';a.textContent=Number(x.sl).toLocaleString('vi-VN');t.append(a);const b=document.createElement('td');b.className='num';b.textContent=fmt(x.dongia);t.append(b);
+   const w=document.createElement('td');w.textContent=x.winner||'';t.append(w);tbd.append(t)});
+  tbl.append(tbd);sc.append(tbl);det.append(sc);td.append(det)}
+ tr2.append(td);frag.push(tr2)});
+tb.replaceChildren(...frag);return out.length}
+function body(id,rows,cols){const tb=$(id);const out=rows.filter(pass);tb.replaceChildren(...out.map((r)=>{const tr=document.createElement('tr');cols.forEach(([f,fn,cls])=>{const td=document.createElement('td');if(f==='notifyNo'&&r.lk)td.append(linkOf(r.notifyNo,r.lk));else td.textContent=fn(r[f]);if(cls)td.className=cls;tr.append(td)});return tr}));return out.length}
+const dayList=()=>{const s=new Set();['start','close','results'].forEach((n)=>(D[n]||[]).forEach((r)=>r.day&&s.add(r.day)));return [...s].sort()};
+function draw(){
+ const ns=body('b-start',D.start||[],[['notifyNo',tx],['loai',tx],['sanpham',tx],['name',tx],['investor',tx],['startAt',tx],['closeAt',tx]]);
+ const nc=body('b-close',D.close||[],[['closeTime',tx],['notifyNo',tx],['loai',tx],['sanpham',tx],['name',tx],['investor',tx]]);
+ const nr=resBody(D.results||[]);
+ const cnt=(n)=>(D[n]||[]).filter((r)=>r.day===curDay).length;
+ $('k-start').textContent=cnt('start');$('k-close').textContent=cnt('close');$('k-results').textContent=cnt('results');$('k-equip').textContent=((D.equip||[]).length+(D.supply||[]).length).toLocaleString('vi-VN');
+}
+function setDay(d){curDay=d;$('f-day').value=d;const l=dayList();$('day-info').textContent=l.length?('Có dữ liệu '+l.length+' ngày, từ '+l[0]+' đến '+l[l.length-1]+(l.includes(d)?'':'. Ngày này chưa có dữ liệu.')):'';draw()}
+function step(k){const l=dayList();if(!l.length)return;const i=l.indexOf(curDay);if(i<0){const c=l.filter((x)=>k>0?x>curDay:x<curDay);const t=k>0?c[0]:c[c.length-1];if(t)setDay(t);return}const j=i+k;if(j>=0&&j<l.length)setDay(l[j])}
+$('f-day').addEventListener('change',()=>setDay($('f-day').value));
+$('day-prev').addEventListener('click',()=>step(-1));$('day-next').addEventListener('click',()=>step(1));
+['f-loai','f-sp'].forEach((i)=>$(i).addEventListener('change',draw));
+
+const AL={rows:[]};
+const dkey=(d)=>d?d.slice(6)+d.slice(3,5)+d.slice(0,2):'';
+function awDraw(){const q=$('a-q').value.trim().toLowerCase(),l=$('a-loai').value,sp=$('a-sp').value;
+ const okSp=(r)=>!sp||String(r.sanpham||'').split(', ').includes(sp);
+ const out=AL.rows.filter((r)=>(!l||r.loai===l)&&okSp(r)&&(!q||r.hay.includes(q)));
+ const cap=300;const two=(a,b)=>{const td=document.createElement('td');const d1=document.createElement('div');d1.textContent=a||'';td.append(d1);if(b){const d2=document.createElement('div');d2.className='sub';d2.textContent=b;td.append(d2)}return td};
+ $('b-all').replaceChildren(...out.slice(0,cap).map((r)=>{const tr=document.createElement('tr');
+  const t0=document.createElement('td');const dd=document.createElement('div');dd.textContent=r.date||'';t0.append(dd);const dl=document.createElement('div');if(r.lk)dl.append(linkOf(r.notifyNo,r.lk));else dl.textContent=r.notifyNo;t0.append(dl);tr.append(t0);
+  tr.append(two(r.item,[r.loai,r.sanpham].filter(Boolean).join(' · ')));
+  tr.append(r.loai==='Thiết bị'?two(r.model,r.kmh&&r.kmh!==r.model?r.kmh:''):two(r.kmh,''));
+  tr.append(two(r.hang,r.xuatxu));
+  const ts=document.createElement('td');ts.className='num';ts.textContent=Number(r.sl).toLocaleString('vi-VN');tr.append(ts);
+  const tp=document.createElement('td');tp.className='num';tp.textContent=fmt(r.dongia);tr.append(tp);
+  const ti=document.createElement('td');ti.textContent=r.investor||'';tr.append(ti);
+  const tw=document.createElement('td');tw.textContent=r.winner||'';tr.append(tw);return tr}));
+ $('a-count').textContent='Khớp '+out.length.toLocaleString('vi-VN')+' / '+AL.rows.length.toLocaleString('vi-VN')+' dòng'+(out.length>cap?'. Đang hiển thị '+cap+' dòng mới nhất, gõ thêm từ khóa để thu hẹp':'');
+ const pk=(D.award||[]).filter((r)=>(!l||r.loai===l)&&okSp(r)&&(!q||[r.name,r.investor,r.winner,r.notifyNo].join(' ').toLowerCase().includes(q)));
+ const tb=$('b-award');const cols=[['date',tx],['sanpham',tx],['loai',tx],['notifyNo',tx],['name',tx],['investor',tx],['winner',tx],['price',fmt,'num'],['budget',fmt,'num']];
+ tb.replaceChildren(...pk.map((r)=>{const tr=document.createElement('tr');cols.forEach(([f,fn,cls])=>{const td=document.createElement('td');if(f==='notifyNo'&&r.lk)td.append(linkOf(r.notifyNo,r.lk));else td.textContent=fn(r[f]);if(cls)td.className=cls;tr.append(td)});return tr}));
+ $('p-count').textContent='Khớp '+pk.length+' / '+(D.award||[]).length+' gói'}
+function awBuild(){AL.rows=[...(D.equip||[]).map((r)=>({...r,loai:'Thiết bị'})),...(D.supply||[])].map((r)=>({...r,hay:[r.item,r.model,r.kmh,r.hang,r.xuatxu,r.winner,r.investor,r.notifyNo].join(' ').toLowerCase()})).sort((a,b)=>dkey(b.date).localeCompare(dkey(a.date)));awDraw()}
+$('a-q').addEventListener('input',awDraw);['a-loai','a-sp'].forEach((i)=>$(i).addEventListener('change',awDraw));
+function tab(t){document.querySelectorAll('[data-tab]').forEach((b)=>b.setAttribute('aria-selected',String(b.dataset.tab===t)));$('pane-today').hidden=t!=='today';$('pane-award').hidden=t!=='award';['g-day','l-loai','l-sp'].forEach((i)=>{$(i).hidden=t==='award'});history.replaceState(null,'',t==='award'?'#trungthau':'#homnay')}
+document.querySelectorAll('[data-tab]').forEach((b)=>b.addEventListener('click',()=>tab(b.dataset.tab)));
+Promise.all(['start','close','results','award','equip','supply','report'].map((n)=>fetch('data/'+n+'.json?v='+Date.now()).then((r)=>r.json()).then((j)=>{D[n]=j}).catch(()=>{D[n]=[]}))).then(()=>{
+ const r=(D.report||[])[0];if(r){$('rp-date').textContent=r.date;$('rp-asof').textContent=r.asOf}
+ awBuild();const l=dayList();setDay(l.length?l[l.length-1]:'');tab(location.hash==='#trungthau'?'award':'today');
+});
+</script>
+<script>if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script></body>
+</html>
