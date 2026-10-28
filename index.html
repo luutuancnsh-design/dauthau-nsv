@@ -231,7 +231,7 @@ footer{text-align:center;color:var(--muted);font-size:.76rem;padding:6px 0 0}
 
 <div id="pane-today" style="display:flex;flex-direction:column;gap:18px">
  <section class="card" id="sec-start"><div class="card-h"><h2>Gói mở trong ngày <span class="num-pill" id="n-start">0</span></h2><p class="note">Thời điểm bắt đầu nhận hồ sơ hoặc TBMT đăng trong ngày</p></div>
- <div class="hint"><b>Tải Chương V:</b> nút tải dùng phần mềm hỗ trợ tải file của muasamcong cài trên máy tính (giống khi tải HSMT trực tiếp trên muasamcong). Nếu bấm không tải được hoặc đang dùng điện thoại, bấm <b>Mở HSMT</b> để tải trên muasamcong.</div>
+ <div class="hint"><b>Tải Chương V:</b> bấm nút <b>Tải Chương V</b> để tải file thẳng từ muasamcong, dùng được trên máy tính Windows, Mac và điện thoại. File thường là .rar, .pdf hoặc .docx.</div>
  <div class="card-b scroll"><table class="cards"><thead><tr><th>Mã TBMT</th><th>Phân loại</th><th>Tên gói thầu</th><th>Bên mời thầu</th><th>Đăng tải</th><th>Đóng thầu</th><th>Thực hiện</th><th class="num">Giá gói thầu</th><th>Chương V</th></tr></thead><tbody id="b-start"><tr class="empty"><td colspan="9"><div class="loading"><span class="spin"></span>Đang tải dữ liệu…</div></td></tr></tbody></table></div></section>
 
  <section class="card" id="sec-close"><div class="card-h"><h2>Gói đóng thầu trong ngày <span class="num-pill" id="n-close">0</span></h2><p class="note">Sắp theo giờ đóng, giờ đã qua được làm mờ</p></div>
@@ -286,7 +286,7 @@ const urlOf=(r)=>{if(!r.lk)return '';const a=linkOf(r.notifyNo,r.lk);return a.hr
 const DLI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
 const whenCell=(v,label)=>{const td=el('td','when');td.dataset.k='meta';td.dataset.l=label;if(isNil(v)){td.textContent='—';return td}const [d,t]=String(v).split(' ');td.append(el('b',null,t||''),document.createTextNode(' '+(d||'')));return td};
 const ch5Cell=(r,x)=>{const td=el('td');td.dataset.k='dl';const f=formOf(r),u=urlOf(r);
- if(x.ch5&&x.ch5.id){const a=el('a','dl');a.href='http://localhost:1234/api/download/file/browser/public?fileId='+encodeURIComponent(x.ch5.id);a.target='_blank';a.rel='noopener';a.title='Tải '+x.ch5.name;a.innerHTML=DLI+'<span>Tải Chương V</span>';td.append(a);td.append(el('span','dlname',x.ch5.name));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
+ if(x.ch5&&x.ch5.id){const a=el('a','dl');a.href='https://muasamcong.mof.gov.vn/api/unau/edocproxy/file/share/'+encodeURIComponent(x.ch5.id);a.rel='noopener';a.setAttribute('download','');a.title='Tải '+x.ch5.name;a.innerHTML=DLI+'<span>Tải Chương V</span>';td.append(a);td.append(el('span','dlname',x.ch5.name));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
  if(f==='CGTTRG'){td.append(el('span','noc5','Không có (chào giá rút gọn)'));if(u){const m=el('a','dlalt','Xem YCKT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
  if(f==='DTRR'||f==='CHCT'){td.append(el('span','noc5','Chưa lấy được file'));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
  td.append(el('span','noc5','—'));return td};
