@@ -78,6 +78,18 @@ select:focus,input:focus,button:focus-visible{border-color:var(--accent);box-sha
 .qhit{background:var(--accentbg);color:var(--accent);border-radius:8px;padding:6px 10px;font-weight:500;display:inline-flex;gap:8px;align-items:center}
 .qhit button{border:0;background:transparent;color:var(--accent);padding:0 2px;font-weight:700}
 .dayof{display:block;font-family:"Be Vietnam Pro",sans-serif;font-size:.72rem;color:var(--muted)}
+/* CHƯƠNG V */
+.dl{display:inline-flex;gap:6px;align-items:center;background:var(--accent);color:#fff!important;border-radius:8px;padding:5px 10px;font-size:.76rem;font-weight:600;white-space:nowrap;text-decoration:none!important}
+@media (prefers-color-scheme:dark){.dl{color:#06201d!important}}
+.dl svg{width:14px;height:14px}
+.dl:hover{filter:brightness(1.08)}
+.dlname{display:block;color:var(--muted);font-size:.7rem;margin-top:3px;max-width:13rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dlalt{display:block;font-size:.72rem;margin-top:2px}
+.noc5{color:var(--muted);font-size:.74rem;line-height:1.35;display:block;max-width:12rem}
+.when{white-space:nowrap;font-variant-numeric:tabular-nums}
+.when b{font-weight:600}
+.hint{background:var(--accentbg);color:var(--fg);border-radius:10px;padding:8px 12px;font-size:.78rem;margin:0 18px 12px}
+.hint b{color:var(--accent)}
 /* CARD */
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);min-width:0;overflow:hidden}
 .card-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;justify-content:space-between;padding:16px 18px 10px}
@@ -172,6 +184,9 @@ footer{text-align:center;color:var(--muted);font-size:.76rem;padding:6px 0 0}
  table.cards td[data-k=meta]::before{content:attr(data-l) ":";color:var(--muted)}
  table.cards td[data-k=meta] .sub{margin:0}
  table.cards td.num{text-align:left}
+ table.cards td[data-k=dl]{grid-column:1/-1;order:5;margin-top:6px}
+ table.cards td[data-k=dl] .dlname{max-width:none}
+ .hint{margin:0 12px 10px}
  table.cards td[data-k=tag].num{text-align:right;font-size:.95rem}
  table.cards tr.empty{display:block!important}table.cards tr.empty td{display:block}
  table.cards tr.gr{display:block}table.cards tr.gr>td{display:block;padding:0 12px 12px}
@@ -216,10 +231,11 @@ footer{text-align:center;color:var(--muted);font-size:.76rem;padding:6px 0 0}
 
 <div id="pane-today" style="display:flex;flex-direction:column;gap:18px">
  <section class="card" id="sec-start"><div class="card-h"><h2>Gói mở trong ngày <span class="num-pill" id="n-start">0</span></h2><p class="note">Thời điểm bắt đầu nhận hồ sơ hoặc TBMT đăng trong ngày</p></div>
- <div class="card-b scroll"><table class="cards"><thead><tr><th>Mã TBMT</th><th>Phân loại</th><th>Tên gói thầu</th><th>Bên mời thầu</th><th>Bắt đầu</th><th>Đóng thầu</th></tr></thead><tbody id="b-start"><tr class="empty"><td colspan="6"><div class="loading"><span class="spin"></span>Đang tải dữ liệu…</div></td></tr></tbody></table></div></section>
+ <div class="hint"><b>Tải Chương V:</b> nút tải dùng phần mềm hỗ trợ tải file của muasamcong cài trên máy tính (giống khi tải HSMT trực tiếp trên muasamcong). Nếu bấm không tải được hoặc đang dùng điện thoại, bấm <b>Mở HSMT</b> để tải trên muasamcong.</div>
+ <div class="card-b scroll"><table class="cards"><thead><tr><th>Mã TBMT</th><th>Phân loại</th><th>Tên gói thầu</th><th>Bên mời thầu</th><th>Đăng tải</th><th>Đóng thầu</th><th>Thực hiện</th><th class="num">Giá gói thầu</th><th>Chương V</th></tr></thead><tbody id="b-start"><tr class="empty"><td colspan="9"><div class="loading"><span class="spin"></span>Đang tải dữ liệu…</div></td></tr></tbody></table></div></section>
 
  <section class="card" id="sec-close"><div class="card-h"><h2>Gói đóng thầu trong ngày <span class="num-pill" id="n-close">0</span></h2><p class="note">Sắp theo giờ đóng, giờ đã qua được làm mờ</p></div>
- <div class="card-b scroll"><table class="cards"><thead><tr><th>Giờ đóng</th><th>Mã TBMT</th><th>Phân loại</th><th>Tên gói thầu</th><th>Bên mời thầu</th></tr></thead><tbody id="b-close"></tbody></table></div></section>
+ <div class="card-b scroll"><table class="cards"><thead><tr><th>Giờ đóng</th><th>Mã TBMT</th><th>Phân loại</th><th>Tên gói thầu</th><th>Bên mời thầu</th><th>Đăng tải</th><th>Thực hiện</th><th class="num">Giá gói thầu</th><th>Chương V</th></tr></thead><tbody id="b-close"></tbody></table></div></section>
 
  <section class="card" id="sec-results"><div class="card-h"><h2>Kết quả lựa chọn nhà thầu <span class="num-pill" id="n-results">0</span></h2><p class="note">Giá cả gói (đồng). Bấm “Hàng hóa trúng thầu” để xem từng mặt hàng</p></div>
  <div class="card-b scroll"><table class="cards"><thead><tr><th>Mã TBMT</th><th>Phân loại</th><th>Tên gói thầu</th><th>Bên mời thầu</th><th>Nhà thầu trúng</th><th class="num">Giá trúng</th><th class="num">Dự toán</th></tr></thead><tbody id="b-results"></tbody></table></div></section>
@@ -257,13 +273,23 @@ const tx=(v)=>isNil(v)?'—':String(v);
 const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e};
 const D={};let curDay='';
 const LC={'Thiết bị':'l-tb','Hóa chất':'l-hc','Vật tư':'l-vt','Thuốc':'l-th'};
-const linkOf=(no,lk)=>{const [id,inp,form]=lk.split('|');const q=new URLSearchParams({p_p_id:'egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2',p_p_lifecycle:'0',p_p_state:'normal',p_p_mode:'view',_egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2_render:'detail-v2',type:'es-notify-contractor',stepCode:'notify-contractor-step-4-kqlcnt',step:'tbmt',id:id,notifyId:id,inputResultId:inp||'undefined',notifyNo:no,processApply:'LDT',bidMode:'1_MTHS',bidForm:form});const a=document.createElement('a');a.href='https://muasamcong.mof.gov.vn/web/guest/contractor-selection?'+q;a.target='_blank';a.rel='noopener';a.textContent=no;return a};
+const linkOf=(no,lk)=>{const [id,inp,form]=lk.split('|');const q=new URLSearchParams({p_p_id:'egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2',p_p_lifecycle:'0',p_p_state:'normal',p_p_mode:'view',_egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2_render:'detail-v2',type:'es-notify-contractor',stepCode:inp?'notify-contractor-step-4-kqlcnt':'notify-contractor-step-1-tbmt',step:'tbmt',id:id,notifyId:id,inputResultId:inp||'undefined',bidInviteId:'undefined',notifyNo:no,planNo:'undefined',isInternet:'1',processApply:'LDT',bidMode:'1_MTHS',bidForm:form||''});const a=document.createElement('a');a.href='https://muasamcong.mof.gov.vn/web/guest/contractor-selection?'+q;a.target='_blank';a.rel='noopener';a.textContent=no;return a};
 const noCell=(r)=>{const td=el('td','mono');td.dataset.k='no';if(r.lk)td.append(linkOf(r.notifyNo,r.lk));else td.textContent=tx(r.notifyNo);if(Q()&&r.day)td.append(el('span','dayof','ngày '+vnDate(r.day)));return td};
 const invCell=(r)=>{const td=el('td','inv');td.dataset.k='inv';if(isNil(r.investor)){td.textContent='—';return td}const s=el('span','inv-link',r.investor);s.title='Xem mọi gói của bên mời thầu này';s.addEventListener('click',()=>{$('f-q').value=r.investor;draw();$('toolbar').scrollIntoView({block:'start'})});td.append(s);return td};
 const tagCell=(r)=>{const td=el('td');td.dataset.k='tag';if(r.loai)td.append(el('span','chip '+(LC[r.loai]||'l-kh'),r.loai));String(r.sanpham||'').split(', ').filter((s)=>s&&s!=='Khác').forEach((s)=>td.append(el('span','sp',s)));return td};
 const txtCell=(v,k,cls,label)=>{const td=el('td',cls,tx(v));td.dataset.k=k;if(label)td.dataset.l=label;return td};
 const priceCell=(v,label,budget)=>{const td=el('td','num price');td.dataset.k='meta';td.dataset.l=label;td.append(document.createTextNode(fmt(v)));if(budget&&v&&budget>v){td.append(el('span','save','−'+Math.round((1-v/budget)*100)+'% dự toán'))}return td};
 const emptyRow=(n,msg)=>{const tr=el('tr','empty');const td=el('td',null,msg);td.colSpan=n;tr.append(td);return tr};
+const DT=(r)=>({...((D.detail||{})[r.notifyNo]||{}),...Object.fromEntries(['publicAt','closeFull','period','budget','ch5'].filter((k)=>!isNil(r[k])).map((k)=>[k,r[k]]))});
+const formOf=(r)=>String(r.lk||'').split('|')[2]||'';
+const urlOf=(r)=>{if(!r.lk)return '';const a=linkOf(r.notifyNo,r.lk);return a.href};
+const DLI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
+const whenCell=(v,label)=>{const td=el('td','when');td.dataset.k='meta';td.dataset.l=label;if(isNil(v)){td.textContent='—';return td}const [d,t]=String(v).split(' ');td.append(el('b',null,t||''),document.createTextNode(' '+(d||'')));return td};
+const ch5Cell=(r,x)=>{const td=el('td');td.dataset.k='dl';const f=formOf(r),u=urlOf(r);
+ if(x.ch5&&x.ch5.id){const a=el('a','dl');a.href='http://localhost:1234/api/download/file/browser/public?fileId='+encodeURIComponent(x.ch5.id);a.target='_blank';a.rel='noopener';a.title='Tải '+x.ch5.name;a.innerHTML=DLI+'<span>Tải Chương V</span>';td.append(a);td.append(el('span','dlname',x.ch5.name));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
+ if(f==='CGTTRG'){td.append(el('span','noc5','Không có (chào giá rút gọn)'));if(u){const m=el('a','dlalt','Xem YCKT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
+ if(f==='DTRR'||f==='CHCT'){td.append(el('span','noc5','Chưa lấy được file'));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
+ td.append(el('span','noc5','—'));return td};
 const Q=()=>$('f-q').value.trim().toLowerCase();
 const norm=(t)=>String(t||'').toLowerCase();
 const pass=(r)=>{const l=$('f-loai').value,s=$('f-sp').value,q=Q();if(q){if(![r.notifyNo,r.investor,r.name,r.winner].map(norm).join(' | ').includes(q))return false}else if(r.day!==undefined&&r.day!==curDay)return false;return (!l||r.loai===l)&&(!s||String(r.sanpham||'').split(', ').includes(s))};
@@ -271,11 +297,11 @@ const todayStr=()=>{const d=new Date(Date.now()+7*3600e3);return d.toISOString()
 const nowMin=()=>{const d=new Date(Date.now()+7*3600e3);return d.getUTCHours()*60+d.getUTCMinutes()};
 
 function drawStart(){const out=(D.start||[]).filter(pass);$('n-start').textContent=out.length;
- $('b-start').replaceChildren(...(out.length?out.map((r)=>{const tr=el('tr');tr.append(noCell(r),tagCell(r),txtCell(r.name,'name','name'),invCell(r),txtCell(r.startAt,'meta','num','Bắt đầu'),txtCell(r.closeAt,'meta','num','Đóng thầu'));return tr}):[emptyRow(6,'Không có gói nào khớp bộ lọc')]));return out.length}
+ $('b-start').replaceChildren(...(out.length?out.map((r)=>{const tr=el('tr');const x=DT(r);tr.append(noCell(r),tagCell(r),txtCell(r.name,'name','name'),invCell(r),whenCell(x.publicAt,'Đăng tải'),whenCell(x.closeFull||r.closeAt,'Đóng thầu'),txtCell(x.period,'meta','when','Thực hiện'),txtCell(fmt(x.budget),'meta','num','Giá gói'),ch5Cell(r,x));return tr}):[emptyRow(9,'Không có gói nào khớp bộ lọc')]));return out.length}
 function drawClose(){const out=(D.close||[]).filter(pass).sort((a,b)=>String(b.day||'').localeCompare(String(a.day||''))||String(a.closeTime).localeCompare(String(b.closeTime)));$('n-close').textContent=out.length;
  const isToday=curDay===todayStr(),nm=nowMin();
  $('b-close').replaceChildren(...(out.length?out.map((r)=>{const tr=el('tr');const td=el('td');td.dataset.k='tag';const[h,m]=String(r.closeTime||'').split(':').map(Number);const past=isToday&&!isNaN(h)&&h*60+(m||0)<nm;td.append(el('span','time'+(past?' past':''),tx(r.closeTime)));
-  const tg=tagCell(r);tg.dataset.k='meta';tg.dataset.l='Loại';tr.append(td,noCell(r),tg,txtCell(r.name,'name','name'),invCell(r));return tr}):[emptyRow(5,'Không có gói nào khớp bộ lọc')]));return out.length}
+  const tg=tagCell(r);tg.dataset.k='meta';tg.dataset.l='Loại';const x=DT(r);tr.append(td,noCell(r),tg,txtCell(r.name,'name','name'),invCell(r),whenCell(x.publicAt,'Đăng tải'),txtCell(x.period,'meta','when','Thực hiện'),txtCell(fmt(x.budget),'meta','num','Giá gói'),ch5Cell(r,x));return tr}):[emptyRow(9,'Không có gói nào khớp bộ lọc')]));return out.length}
 function drawResults(){const out=(D.results||[]).filter(pass);$('n-results').textContent=out.length;const frag=[];
  out.forEach((r)=>{const tr=el('tr');tr.append(noCell(r),tagCell(r),txtCell(r.name,'name','name'),invCell(r),txtCell(r.winner,'meta',null,'Nhà thầu'),priceCell(r.price,'Giá trúng',r.budget),(()=>{const t=txtCell(fmt(r.budget),'meta','num','Dự toán');return t})());frag.push(tr);
   const gs=r.goods||[];const tr2=el('tr','gr');const td=el('td');td.colSpan=7;
@@ -323,7 +349,7 @@ new IntersectionObserver(([e])=>$('toolbar').classList.toggle('stuck',e.intersec
 
 const get=(n)=>fetch('data/'+n+'.json?v='+Date.now()).then((r)=>r.json()).then((j)=>{D[n]=j}).catch(()=>{D[n]=[]});
 // Tải dữ liệu nhẹ trước để trang hiện nhanh, dữ liệu hàng hóa (lớn) tải sau
-Promise.all(['start','close','results','award','report'].map(get)).then(()=>{
+Promise.all(['start','close','results','award','report','detail'].map(get)).then(()=>{
  const r=(D.report||[])[0];if(r){$('rp-date').textContent=r.date?vnDate(r.date):'—';$('rp-asof').textContent=r.asOf?', '+r.asOf:''}
  const l=dayList();setDay(l.length?l[l.length-1]:'');const uq=new URLSearchParams(location.search).get('q');if(uq){$('f-q').value=uq;draw()}tab(location.hash==='#trungthau'?'award':'today');awDraw(true);
  Promise.all(['equip','supply'].map(get)).then(awBuild);
