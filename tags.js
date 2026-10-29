@@ -10,15 +10,15 @@ const LIST=[
  ['D-10',R('(?<![a-z0-9.\\/-])d-10(?![\\d.,])')],['D-100',R('(?<![a-z0-9.\\/-])d-100(?![\\d.,])')],
  ['Mixrate',R('mix[\\s-]*rate')],['Microsed',R('micro[\\s-]*sed(?![a-z])')],
  ['490-2D',R('490[\\s-]*2d(?![a-z])')],['490 4+',R('490[\\s-]*4\\s*\\+')],
- ['CA-270',R('(?<![a-z0-9])ca(\\s*-\\s*|)270(?!\\d)')],['CA-400',R('(?<![a-z0-9])ca(\\s*-\\s*|)400(?!\\d)')],['CA-800',R('(?<![a-z0-9])ca(\\s*-\\s*|)800(?!\\d)')],
+ ['CA-270',R('(?<![a-z0-9])ca(\\s*-\\s*|)270(?!\\d)')],['CA-400',R('(?<![a-z0-9])ca(\\s*-\\s*|)400(?!\\d)')],['CA-800',R('(?<![a-z0-9])ca(\\s*-\\s*|)800(?!\\d)')],['CA-310',R('(?<![a-z0-9])ca(\\s*-\\s*|)310(?!\\d)')],
  ['EXIAS',R('exias')],
- ['Urilyzer 100',R('urilyzer[\\s-]*100(?!\\d)')],['Urilyzer Auto',R('urilyzer[\\s-]*auto')],['Urilyzer 500',R('urilyzer[\\s-]*500(?!\\d)')],
+ ['Urilyzer 100',R('urilyzer[\\s-]*100(?!\\d)')],['Urilyzer Auto',R('urilyzer[\\s-]*auto')],['Urilyzer 500',R('urilyzer[\\s-]*500(?!\\d)')],['Urilyzer Cell',R('urilyzer[\\s-]*cell')],
  ['Nihon Kohden',R('nihon[\\s-]*kohden')],['Furuno',R('furuno')],['Analyticon',R('analyticon')]
 ];
 const MEK={'6400':'Celltac Alpha (α)','6410':'Celltac Alpha (α)','6420':'Celltac Alpha (α)','6500':'Celltac Alpha (α)','6510':'Celltac Alpha (α)','6550':'Celltac Alpha (α)','7222':'Celltac E','7300':'Celltac Es','8222':'Celltac F','9100':'Celltac G'};
 /* Nhãn hãng tự thêm khi thấy model của hãng */
 const BRAND={'Nihon Kohden':/^(Celltac|MEK-)/,'Furuno':/^CA-/,'Analyticon':/^Urilyzer/};
-const ORDER=['Nihon Kohden','Celltac','Celltac G','Celltac Alpha (α)','Celltac Es','Celltac E','Celltac F','MEK-','Furuno','CA-270','CA-400','CA-800','Analyticon','Urilyzer','Urilyzer 100','Urilyzer 500','Urilyzer Auto','EXIAS','Thrombolyzer','Thrombolyzer XRC','Thrombolyzer XRM','Compact X','IH-100','IH-500','IH-1000','D-10','D-100','Mixrate','Microsed','490-2D','490 4+'];
+const ORDER=['Nihon Kohden','Celltac','Celltac G','Celltac Alpha (α)','Celltac Es','Celltac E','Celltac F','MEK-','Furuno','CA-270','CA-310','CA-400','CA-800','Analyticon','Urilyzer','Urilyzer 100','Urilyzer 500','Urilyzer Auto','Urilyzer Cell','EXIAS','Thrombolyzer','Thrombolyzer XRC','Thrombolyzer XRM','Compact X','IH-100','IH-500','IH-1000','D-10','D-100','Mixrate','Microsed','490-2D','490 4+'];
 function nhan(text){
  const t=String(text||'');if(!t)return[];const s=new Set();
  for(const [k,re] of LIST)if(re.test(t))s.add(k);

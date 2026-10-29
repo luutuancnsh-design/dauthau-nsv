@@ -120,6 +120,35 @@ tbody tr:last-child>td{border-bottom:0}
 .empty td{text-align:center;color:var(--muted);padding:26px 12px}
 .empty:hover>td{background:transparent!important}
 
+/* ĐỐI CHIẾU THIẾT BỊ */
+.mt{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:1px 9px;font-size:.72rem;font-weight:700;white-space:nowrap;margin:1px 3px 1px 0;cursor:pointer;border:1px solid currentColor}
+.mt svg{width:12px;height:12px}
+.r-hi{color:#15803d;background:#e7f6ec}.r-md{color:#b45309;background:#fdf1e3}.r-lo{color:#be123c;background:#fde8ec}
+@media (prefers-color-scheme:dark){.r-hi{color:#7ddc9c;background:#173323}.r-md{color:#f5b26b;background:#3a2a17}.r-lo{color:#fb7185;background:#3b1a22}}
+.mdl-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}
+.mdl{background:var(--panel);color:var(--fg);border-radius:16px;width:min(1100px,100%);max-height:92vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:hidden}
+.mdl-h{background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;padding:16px 18px;display:flex;gap:12px;align-items:flex-start}
+.mdl-h h3{margin:0;font-size:1.05rem;line-height:1.35}.mdl-h .s{font-size:.78rem;opacity:.85;margin-top:3px}
+.mdl-h button{margin-left:auto;border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:10px;padding:6px 12px;font-weight:600;cursor:pointer;flex:none}
+.mdl-b{overflow:auto;padding:14px 18px 18px}
+.mtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.mtab{border:1px solid var(--line);background:var(--panel2);border-radius:12px;padding:8px 12px;cursor:pointer;min-width:150px;text-align:left;color:var(--fg)}
+.mtab[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accentbg)}
+.mtab b{display:block;font-size:.9rem}.mtab .bar{height:6px;border-radius:9px;background:var(--line2);margin:6px 0 4px;overflow:hidden}.mtab .bar i{display:block;height:100%}
+.mtab small{color:var(--muted);font-size:.72rem}
+.mnote{background:var(--accentbg);color:var(--fg);border-radius:12px;padding:10px 12px;font-size:.86rem;margin-bottom:12px}
+.mfil{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.mfil button{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:4px 11px;font-size:.78rem;font-weight:600;cursor:pointer;color:var(--muted)}
+.mfil button[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+table.mtb{width:100%;border-collapse:collapse;font-size:.84rem}
+table.mtb th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);padding:8px;border-bottom:1px solid var(--line);position:sticky;top:-14px;background:var(--panel)}
+table.mtb td{padding:8px;border-bottom:1px solid var(--line2);vertical-align:top}
+.st{display:inline-block;border-radius:6px;padding:1px 8px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.st-dat{background:#e7f6ec;color:#15803d}.st-khong{background:#fde8ec;color:#be123c}.st-chua_ro{background:#fdf1e3;color:#b45309}
+@media (prefers-color-scheme:dark){.st-dat{background:#173323;color:#7ddc9c}.st-khong{background:#3b1a22;color:#fb7185}.st-chua_ro{background:#3a2a17;color:#f5b26b}}
+.mtb .nt{display:block;color:var(--muted);font-size:.76rem;margin-top:2px}
+@media (max-width:720px){.mdl-bg{padding:0}.mdl{max-height:100vh;height:100%;border-radius:0}.mtab{min-width:0;flex:1 1 45%}table.mtb thead{display:none}table.mtb tr{display:block;border-bottom:1px solid var(--line2);padding:8px 0}table.mtb td{display:block;border:0;padding:2px 0}table.mtb td:nth-child(2)::before{content:'Máy: ';color:var(--muted)}}
+
 /* CHIPS */
 .chip{display:inline-block;border-radius:6px;padding:1px 8px;font-size:.72rem;font-weight:600;white-space:nowrap;margin:1px 3px 1px 0}
 .l-tb{background:var(--c-tb-bg);color:var(--c-tb)}.l-hc{background:var(--c-hc-bg);color:var(--c-hc)}.l-vt{background:var(--c-vt-bg);color:var(--c-vt)}.l-th{background:var(--c-th-bg);color:var(--c-th)}.l-kh{background:var(--c-kh-bg);color:var(--c-kh)}.l-mr{background:var(--accentbg);color:var(--accent)}
@@ -288,13 +317,29 @@ const LC={'Thiết bị':'l-tb','Hóa chất':'l-hc','Vật tư':'l-vt','Thuốc
 const NH=window.NHAN||{nhan:()=>[],ORDER:[]};const ITAG={};
 const nhOf=(r)=>{if(r._nh)return r._nh;const t=[r.name,...(r.goods||[]).map((g)=>[g.item,g.model,g.kmh,g.hang].join(' '))].join(' \n ');const s=new Set([...(r.nhan||[]),...NH.nhan(t),...(ITAG[r.notifyNo]||[])]);return r._nh=NH.sort?NH.sort([...s]):[...s]};
 const nhChips=(box,tags,sel)=>tags.forEach((t)=>{const c=el('span','nh',t);c.title='Lọc theo nhãn '+t;c.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();const f=$(sel);if(![...f.options].some((o)=>o.value===t))f.append(new Option(t,t));f.value=t;f.dispatchEvent(new Event('change'))});box.append(c)});
-const nhPass=(r,v)=>!v||(v==='*'?nhOf(r).length>0:nhOf(r).includes(v));
+const nhPass=(r,v)=>!v||(v==='#match'?!!(D.match||{})[r.notifyNo]:v==='*'?nhOf(r).length>0:nhOf(r).includes(v));
+/* Đối chiếu YCKT với thiết bị đang cung cấp */
+const rcls=(x)=>x>=80?'r-hi':x>=60?'r-md':'r-lo';
+const GEAR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>';
+function mtChips(td,r){const m=(D.match||{})[r.notifyNo];if(!m)return;m.items.forEach((it,i)=>{const b=it.models[0];if(!b)return;const c=el('span','mt '+rcls(b.rate));c.innerHTML=GEAR;c.append(b.model+' · '+b.rate+'%');c.title='Đối chiếu YCKT "'+it.item+'" với '+b.model+': đạt '+b.ok+', không đạt '+b.no+', chưa rõ '+b.unk+'. Bấm để xem chi tiết';c.addEventListener('click',(e)=>{e.stopPropagation();openMatch(r,i)});td.append(c)})}
+function openMatch(r,i){const m=D.match[r.notifyNo],it=m.items[i];let cur=it.models[0].model,flt='';
+ const bg=el('div','mdl-bg'),md=el('div','mdl'),h=el('div','mdl-h'),hx=el('div');hx.append(el('h3',null,it.item+' · '+r.notifyNo),el('div','s',(r.investor||'')+' · Nguồn: '+m.src+(it.ref?' · YCKT có vẻ viết theo: '+it.ref:'')));
+ const x=el('button',null,'Đóng');x.type='button';h.append(hx,x);const body=el('div','mdl-b');md.append(h,body);bg.append(md);
+ const close=()=>{bg.remove();document.removeEventListener('keydown',esc)};const esc=(e)=>{if(e.key==='Escape')close()};x.onclick=close;bg.onclick=(e)=>{if(e.target===bg)close()};document.addEventListener('keydown',esc);
+ const draw=()=>{const tabs=el('div','mtabs');it.models.forEach((mo)=>{const t=el('button','mtab');t.type='button';t.setAttribute('aria-pressed',String(mo.model===cur));const bar=el('div','bar'),bi=el('i');bi.style.width=mo.rate+'%';bi.style.background=mo.rate>=80?'#16a34a':mo.rate>=60?'#d97706':'#e11d48';bar.append(bi);
+   t.append(el('b',null,mo.model+' · '+mo.rate+'%'),bar,el('small',null,'Đạt '+mo.ok+' · Không '+mo.no+' · Chưa rõ '+mo.unk+(mo.unk?' (tối đa '+Math.round(100*(mo.ok+mo.unk)/(mo.ok+mo.no+mo.unk))+'%)':'')));t.onclick=()=>{cur=mo.model;draw()};tabs.append(t)});
+  const parts=[tabs];if(it.nhanxet)parts.push(el('div','mnote',it.nhanxet));
+  const fl=el('div','mfil');[['','Tất cả'],['khong','Không đạt'],['chua_ro','Chưa rõ'],['dat','Đạt']].forEach(([k,l])=>{const n=it.rows.filter((x)=>!k||x.st[cur]===k).length;const b=el('button',null,l+' ('+n+')');b.type='button';b.setAttribute('aria-pressed',String(flt===k));b.onclick=()=>{flt=k;draw()};fl.append(b)});parts.push(fl);
+  const tb=el('table','mtb');const th=el('thead');th.innerHTML='<tr><th style="width:42%">Yêu cầu của gói thầu</th><th>Thông số '+cur.replace(/</g,'')+'</th><th style="width:96px">Kết quả</th></tr>';const tbd=el('tbody');
+  it.rows.filter((x)=>!flt||x.st[cur]===flt).forEach((x)=>{const tr=el('tr');const a=el('td',null,x.req);const b=el('td',null,x.spec[cur]||'');if(x.note){const n=el('span','nt',x.note);b.append(n)}const c=el('td');c.append(el('span','st st-'+x.st[cur],{dat:'Đạt',khong:'Không đạt',chua_ro:'Chưa rõ'}[x.st[cur]]));tr.append(a,b,c);tbd.append(tr)});
+  tb.append(th,tbd);parts.push(tb);parts.push(el('div','hint','Tỷ lệ đáp ứng = số tiêu chí đạt / tổng số tiêu chí. "Chưa rõ" là tiêu chí bảng tính năng của hãng chưa ghi, cần kiểm tra catalogue hoặc hỏi hãng. Kết quả do máy đối chiếu tự động, cần rà lại trước khi dự thầu.'));body.replaceChildren(...parts)};
+ draw();document.body.append(bg)}
 function nhFill(sel,rows){const f=$(sel),v=f.value,cnt={};rows.forEach((r)=>nhOf(r).forEach((t)=>{cnt[t]=(cnt[t]||0)+1}));const keys=NH.sort?NH.sort(Object.keys(cnt)):Object.keys(cnt).sort();const any=rows.filter((r)=>nhOf(r).length).length;
- f.replaceChildren(new Option('Mọi nhãn hãng/model',''),new Option('Có nhãn bất kỳ ('+any+')','*'),...keys.map((k)=>new Option(k+' ('+cnt[k]+')',k)));if(v&&![...f.options].some((o)=>o.value===v))f.append(new Option(v+' (0)',v));f.value=v}
-const linkOf=(no,lk)=>{const [id,inp,form]=lk.split('|');const q=new URLSearchParams({p_p_id:'egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2',p_p_lifecycle:'0',p_p_state:'normal',p_p_mode:'view',_egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2_render:'detail-v2',type:'es-notify-contractor',stepCode:inp?'notify-contractor-step-4-kqlcnt':'notify-contractor-step-1-tbmt',step:'tbmt',id:id,notifyId:id,inputResultId:inp||'undefined',bidInviteId:'undefined',notifyNo:no,planNo:'undefined',isInternet:'1',processApply:'LDT',bidMode:'1_MTHS',bidForm:form||''});const a=document.createElement('a');a.href='https://muasamcong.mof.gov.vn/web/guest/contractor-selection?'+q;a.target='_blank';a.rel='noopener';a.textContent=no;return a};
+ const nm=rows.filter((r)=>(D.match||{})[r.notifyNo]).length;f.replaceChildren(new Option('Mọi nhãn hãng/model',''),new Option('Có đối chiếu thiết bị ('+nm+')','#match'),new Option('Có nhãn bất kỳ ('+any+')','*'),...keys.map((k)=>new Option(k+' ('+cnt[k]+')',k)));if(v&&![...f.options].some((o)=>o.value===v))f.append(new Option(v+' (0)',v));f.value=v}
+const linkOf=(no,lk)=>{const [id,inp,form]=lk.split('|');if(form==='YCBG'){const P='egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2';const a=document.createElement('a');a.href='https://muasamcong.mof.gov.vn/web/guest/contractor-selection?'+new URLSearchParams({p_p_id:P,p_p_lifecycle:'0',p_p_state:'normal',p_p_mode:'view',['_'+P+'_render']:'detail-v2',type:'es-ycbg',stepCode:'request-quote-step-1',id:id,notifyNo:no,isInternet:'1'});a.target='_blank';a.rel='noopener';a.textContent=no;return a}const q=new URLSearchParams({p_p_id:'egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2',p_p_lifecycle:'0',p_p_state:'normal',p_p_mode:'view',_egpportalcontractorselectionv2_WAR_egpportalcontractorselectionv2_render:'detail-v2',type:'es-notify-contractor',stepCode:inp?'notify-contractor-step-4-kqlcnt':'notify-contractor-step-1-tbmt',step:'tbmt',id:id,notifyId:id,inputResultId:inp||'undefined',bidInviteId:'undefined',notifyNo:no,planNo:'undefined',isInternet:'1',processApply:'LDT',bidMode:'1_MTHS',bidForm:form||''});const a=document.createElement('a');a.href='https://muasamcong.mof.gov.vn/web/guest/contractor-selection?'+q;a.target='_blank';a.rel='noopener';a.textContent=no;return a};
 const noCell=(r)=>{const td=el('td','mono');td.dataset.k='no';if(r.lk)td.append(linkOf(r.notifyNo,r.lk));else td.textContent=tx(r.notifyNo);if(Q()&&r.day)td.append(el('span','dayof','ngày '+vnDate(r.day)));return td};
 const invCell=(r)=>{const td=el('td','inv');td.dataset.k='inv';if(isNil(r.investor)){td.textContent='—';return td}const s=el('span','inv-link',r.investor);s.title='Xem mọi gói của bên mời thầu này';s.addEventListener('click',()=>{$('f-q').value=r.investor;draw();$('toolbar').scrollIntoView({block:'start'})});td.append(s);return td};
-const tagCell=(r)=>{const td=el('td');td.dataset.k='tag';if(r.mr){const c=el('span','chip l-mr','Mở rộng');c.title='Gói lấy theo đơn vị y tế (bệnh viện, TTYT, CDC...), không chứa từ khóa xét nghiệm trong tên';td.append(c)}String(r.loai||'').split(', ').filter(Boolean).forEach((t)=>td.append(el('span','chip '+(LC[t]||'l-kh'),t)));String(r.sanpham||'').split(', ').filter((s)=>s&&s!=='Khác').forEach((s)=>td.append(el('span','sp',s)));nhChips(td,nhOf(r),r.date!==undefined&&r.day===undefined?'a-tag':'f-tag');return td};
+const tagCell=(r)=>{const td=el('td');td.dataset.k='tag';if(formOf(r)==='YCBG'){const c=el('span','chip l-mr','Báo giá');c.title='Yêu cầu báo giá (giai đoạn lập dự toán)';td.append(c)}if(r.mr){const c=el('span','chip l-mr','Mở rộng');c.title='Gói lấy theo đơn vị y tế (bệnh viện, TTYT, CDC...), không chứa từ khóa xét nghiệm trong tên';td.append(c)}String(r.loai||'').split(', ').filter(Boolean).forEach((t)=>td.append(el('span','chip '+(LC[t]||'l-kh'),t)));String(r.sanpham||'').split(', ').filter((s)=>s&&s!=='Khác').forEach((s)=>td.append(el('span','sp',s)));nhChips(td,nhOf(r),r.date!==undefined&&r.day===undefined?'a-tag':'f-tag');mtChips(td,r);return td};
 const txtCell=(v,k,cls,label)=>{const td=el('td',cls,tx(v));td.dataset.k=k;if(label)td.dataset.l=label;return td};
 const priceCell=(v,label,budget)=>{const td=el('td','num price');td.dataset.k='meta';td.dataset.l=label;td.append(document.createTextNode(fmt(v)));if(budget&&v&&budget>v){td.append(el('span','save','−'+Math.round((1-v/budget)*100)+'% dự toán'))}return td};
 const emptyRow=(n,msg)=>{const tr=el('tr','empty');const td=el('td',null,msg);td.colSpan=n;tr.append(td);return tr};
@@ -304,7 +349,8 @@ const urlOf=(r)=>{if(!r.lk)return '';const a=linkOf(r.notifyNo,r.lk);return a.hr
 const DLI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
 const whenCell=(v,label)=>{const td=el('td','when');td.dataset.k='meta';td.dataset.l=label;if(isNil(v)){td.textContent='—';return td}const [d,t]=String(v).split(' ');td.append(el('b',null,t||''),document.createTextNode(' '+(d||'')));return td};
 const ch5Cell=(r,x)=>{const td=el('td');td.dataset.k='dl';const f=formOf(r),u=urlOf(r);
- if(x.ch5&&x.ch5.id){const a=el('a','dl');a.href='https://muasamcong.mof.gov.vn/api/unau/edocproxy/file/share/'+encodeURIComponent(x.ch5.id);a.rel='noopener';a.setAttribute('download','');a.title='Tải '+x.ch5.name;a.innerHTML=DLI+'<span>Tải Chương V</span>';const AP=window.DauThauApp||(window.parent!==window&&window.parent.DauThauApp);if(AP)a.addEventListener('click',(e)=>{e.preventDefault();AP.download(a.href,x.ch5.name||'Chuong V')});td.append(a);td.append(el('span','dlname',x.ch5.name));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
+ if(x.ch5&&x.ch5.id){const a=el('a','dl');a.href='https://muasamcong.mof.gov.vn/api/unau/edocproxy/file/share/'+encodeURIComponent(x.ch5.id);a.rel='noopener';a.setAttribute('download','');a.title='Tải '+x.ch5.name;a.innerHTML=DLI+'<span>'+(f==='YCBG'?'Tải file YCBG':'Tải Chương V')+'</span>';const AP=window.DauThauApp||(window.parent!==window&&window.parent.DauThauApp);if(AP)a.addEventListener('click',(e)=>{e.preventDefault();AP.download(a.href,x.ch5.name||'Chuong V')});td.append(a);td.append(el('span','dlname',x.ch5.name));if(u){const m=el('a','dlalt',f==='YCBG'?'Mở YCBG trên muasamcong':'Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
+ if(f==='YCBG'){if(u){const m=el('a','dlalt','Mở YCBG trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
  if(f==='CGTTRG'){td.append(el('span','noc5','Không có (chào giá rút gọn)'));if(u){const m=el('a','dlalt','Xem YCKT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
  if(f==='DTRR'||f==='CHCT'){td.append(el('span','noc5','Chưa lấy được file'));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
  td.append(el('span','noc5','—'));return td};
@@ -367,7 +413,7 @@ new IntersectionObserver(([e])=>$('toolbar').classList.toggle('stuck',e.intersec
 
 const get=(n)=>fetch('data/'+n+'.json?v='+Date.now()).then((r)=>r.json()).then((j)=>{D[n]=j}).catch(()=>{D[n]=[]});
 // Tải dữ liệu nhẹ trước để trang hiện nhanh, dữ liệu hàng hóa (lớn) tải sau
-Promise.all(['start','close','results','award','report','detail'].map(get)).then(()=>{
+Promise.all(['start','close','results','award','report','detail','match'].map(get)).then(()=>{
  const r=(D.report||[])[0];if(r){$('rp-date').textContent=r.date?vnDate(r.date):'—';$('rp-asof').textContent=r.asOf?', '+r.asOf:''}
  nhFill('f-tag',[...(D.start||[]),...(D.close||[]),...(D.results||[])]);nhFill('a-tag',D.award||[]);const l=dayList();setDay(l.length?l[l.length-1]:'');const uq=new URLSearchParams(location.search).get('q');if(uq){$('f-q').value=uq;draw()}tab(location.hash==='#trungthau'?'award':'today');awDraw(true);
  Promise.all(['equip','supply'].map(get)).then(awBuild);
