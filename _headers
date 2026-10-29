@@ -4,3 +4,11 @@
   Content-Type: application/vnd.android.package-archive
   Content-Disposition: attachment; filename="DauThauXN.apk"
   Cache-Control: no-cache
+/
+  Cache-Control: no-cache
+/*.html
+  Cache-Control: no-cache
+/app
+  Cache-Control: no-cache
+/sw.js
+  Cache-Control: no-cache
