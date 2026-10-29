@@ -106,7 +106,7 @@ public class CheckJob extends JobService {
             }
             body.append("\n").append(e.optString("no"));
             Intent open = new Intent(c, MainActivity.class).setAction("open." + e.optString("key"))
-                    .putExtra("url", e.optString("url")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    .putExtra("url", e.optString("url")).putExtra("no", e.optString("no")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pi = PendingIntent.getActivity(c, e.optString("key").hashCode(), open,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(c, CH) : new Notification.Builder(c);
@@ -124,7 +124,7 @@ public class CheckJob extends JobService {
             Notification.Builder s = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(c, CH) : new Notification.Builder(c);
             s.setSmallIcon(R.drawable.ic_stat).setColor(0xFF0F766E).setGroup("dt").setGroupSummary(true)
              .setContentTitle(shown + " hoạt động mới").setAutoCancel(true)
-             .setContentIntent(PendingIntent.getActivity(c, 1, new Intent(c, MainActivity.class), PendingIntent.FLAG_IMMUTABLE));
+             .setContentIntent(PendingIntent.getActivity(c, 1, new Intent(c, MainActivity.class).setAction("open.bell").putExtra("bell", true).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
             try { nm.notify(1, s.build()); } catch (SecurityException ignored) {}
         }
     }

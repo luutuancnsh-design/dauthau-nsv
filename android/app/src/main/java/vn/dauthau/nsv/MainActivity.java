@@ -50,6 +50,12 @@ public class MainActivity extends Activity {
                 openExternal(url);
                 return true;
             }
+            @Override public void onPageFinished(WebView v, String url) {
+                if (url != null && url.startsWith(BASE + "app")) {
+                    pageReady = true;
+                    if (pendingJs != null) { final String js = pendingJs; pendingJs = null; v.postDelayed(() -> v.evaluateJavascript(js, null), 400); }
+                }
+            }
             @Override public void onReceivedError(WebView v, WebResourceRequest r, WebResourceError e) {
                 if (r.isForMainFrame()) v.loadDataWithBaseURL(BASE, OFFLINE, "text/html", "utf-8", null);
             }
@@ -69,10 +75,23 @@ public class MainActivity extends Activity {
 
     @Override protected void onNewIntent(Intent i) { super.onNewIntent(i); handle(i); }
 
+    String pendingJs = null;
+    boolean pageReady = false;
+
+    /** Bấm thông báo: mở trang chi tiết gói ngay trong app (chỉ mở muasamcong khi trang không hỗ trợ). */
     void handle(Intent i) {
         if (i == null) return;
-        String url = i.getStringExtra("url");
-        if (url != null && !url.isEmpty()) { i.removeExtra("url"); openExternal(url); }
+        String no = i.getStringExtra("no"), url = i.getStringExtra("url");
+        boolean bell = i.getBooleanExtra("bell", false);
+        i.removeExtra("no"); i.removeExtra("url"); i.removeExtra("bell");
+        String js = null;
+        if (no != null && !no.isEmpty()) {
+            js = "window.DT_OPEN?DT_OPEN(" + org.json.JSONObject.quote(no) + "):(window.DauThauApp&&DauThauApp.openUrl(" + org.json.JSONObject.quote(url == null ? "" : url) + "))";
+        } else if (bell) {
+            js = "window.DT_BELL&&DT_BELL()";
+        } else if (url != null && !url.isEmpty()) { openExternal(url); return; }
+        if (js == null) return;
+        if (pageReady) web.evaluateJavascript(js, null); else pendingJs = js;
     }
 
     @Override protected void onResume() {

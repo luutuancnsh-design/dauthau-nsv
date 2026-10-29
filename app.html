@@ -312,6 +312,10 @@ $('b-check').onclick=async()=>{if(!A)return;const b=$('b-check');if(b.classList.
 let checking=false;
 async function autoCheck(){if(!A||checking||document.hidden||!S.follows.length)return;if(Date.now()-(S.lastCheck||0)<3*60e3)return;checking=true;$('b-check').classList.add('spin');try{await call('check')}catch(e){}checking=false;$('b-check').classList.remove('spin');load()}
 window.DT_RESUME=()=>{load();autoCheck()};
+/* Mở từ thông báo đẩy của app */
+window.DT_OPEN=(no)=>{load();const e=S.feed.find((x)=>x.no===no);if(view!=='feed')go('feed');if(e&&!e.read){A.markRead();S.feed.forEach((x)=>{x.read=true});render()}
+ if(window.CT)CT.open(no,e?{ten:e.title,bmt:e.investor,gia:e.budget,dang:e.kind==='kq'?'':e.date,dong:e.close}:{});else if(e)A.openUrl(e.url)};
+window.DT_BELL=()=>{load();if(view!=='feed')go('feed');openBell()};
 /* Báo có bản app mới */
 if(A&&A.version)fetch('app/version.json?v='+Date.now()).then((r)=>r.json()).then((v)=>{const cur=String(A.version()).split('.').map(Number),nw=String(v.version).split('.').map(Number);
  const newer=nw.some((x,i)=>x>(cur[i]||0)&&nw.slice(0,i).every((y,j)=>y===(cur[j]||0)));if(!newer)return;const m=el('div','msg');m.style.margin='10px 16px 0';m.append('Có bản app mới '+v.version+(v.note?': '+v.note:'')+' ');const a=el('a',null,'Tải về');a.href='app/dauthau.apk';a.style.fontWeight='700';a.onclick=(e)=>{e.preventDefault();A.openUrl(location.origin+'/app/dauthau.apk')};m.append(a);document.querySelector('.top').after(m)}).catch(()=>{});
