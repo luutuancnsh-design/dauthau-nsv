@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f5f58">
+<title>Đấu thầu XN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+:root{
+ --bg:#f4f6f5;--panel:#fff;--panel2:#f8faf9;--fg:#14211f;--muted:#5d6b68;--line:#e2e8e6;--line2:#eef2f1;
+ --accent:#0f766e;--accentbg:#e6f4f2;--hero1:#0b3d3a;--hero2:#0f766e;
+ --k-ycbg:#c2410c;--k-ycbg-bg:#fff1e8;--k-tbmt:#2563eb;--k-tbmt-bg:#e8effd;--k-open:#7c3aed;--k-open-bg:#f1eafd;--k-kq:#15803d;--k-kq-bg:#e7f6ec;
+ --shadow:0 1px 2px rgba(16,40,36,.05),0 4px 16px rgba(16,40,36,.05);
+}
+@media (prefers-color-scheme:dark){:root{
+ --bg:#0e1514;--panel:#151f1d;--panel2:#1a2624;--fg:#e8efed;--muted:#97a8a4;--line:#26332f;--line2:#1f2b29;
+ --accent:#2dd4bf;--accentbg:#173532;--hero1:#0b2b29;--hero2:#115e57;
+ --k-ycbg:#fb923c;--k-ycbg-bg:#3a2316;--k-tbmt:#93b4ff;--k-tbmt-bg:#1c2a47;--k-open:#c4a7ff;--k-open-bg:#2c2147;--k-kq:#7ddc9c;--k-kq-bg:#173323;
+ --shadow:none;
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 "Be Vietnam Pro","Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:calc(66px + env(safe-area-inset-bottom))}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit}
+svg{flex:none}
+
+/* TOP */
+.top{background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;padding:14px 16px 16px;position:sticky;top:0;z-index:5}
+.top-r{display:flex;align-items:center;gap:12px}
+.logo{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.14);display:grid;place-items:center}
+.logo svg{width:22px;height:22px}
+.top h1{margin:0;font-size:1.15rem;font-weight:700;line-height:1.2}
+.top .st{font-size:.76rem;color:rgba(255,255,255,.78)}
+.ibtn{margin-left:auto;width:40px;height:40px;border-radius:12px;border:0;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer}
+.ibtn svg{width:20px;height:20px}
+.ibtn.spin svg{animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+
+/* CHIPS */
+.chips{display:flex;gap:6px;overflow-x:auto;padding:12px 16px 4px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 12px;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip b{font-weight:700;margin-left:4px;opacity:.85}
+
+/* FEED */
+.wrap{padding:4px 16px 16px}
+.day{font-size:.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:14px 2px 6px}
+.ev{background:var(--panel);border:1px solid var(--line2);border-radius:14px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);cursor:pointer;position:relative}
+.ev:active{transform:scale(.995)}
+.ev.new::after{content:'';position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background:#e11d48}
+.ev-h{display:flex;align-items:center;gap:8px;margin-bottom:5px;padding-right:14px}
+.kind{font-size:.7rem;font-weight:700;border-radius:6px;padding:1px 7px;white-space:nowrap}
+.k-ycbg{background:var(--k-ycbg-bg);color:var(--k-ycbg)}.k-tbmt{background:var(--k-tbmt-bg);color:var(--k-tbmt)}.k-open{background:var(--k-open-bg);color:var(--k-open)}.k-kq{background:var(--k-kq-bg);color:var(--k-kq)}
+.time{font-size:.74rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+.inv{font-size:.8rem;font-weight:600;color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ttl{font-size:.92rem;font-weight:600;line-height:1.35}
+.meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.76rem;color:var(--muted);margin-top:6px}
+.meta b{color:var(--fg);font-weight:600}
+.win{margin-top:6px;font-size:.8rem;background:var(--k-kq-bg);color:var(--k-kq);border-radius:8px;padding:5px 9px}
+.win b{font-weight:700}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 22px;color:var(--muted)}
+.empty .big{width:62px;height:62px;border-radius:18px;background:var(--accentbg);color:var(--accent);display:grid;place-items:center;margin:0 auto 12px}
+.empty .big svg{width:30px;height:30px}
+.empty h3{color:var(--fg);margin:0 0 6px;font-size:1.05rem}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:12px;padding:10px 16px;background:var(--accent);color:#fff;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:var(--accentbg);color:var(--accent)}
+.btn svg{width:17px;height:17px}
+
+/* SEARCH / FOLLOW */
+.sbox{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:0 12px;margin:12px 0 6px}
+.sbox svg{width:18px;height:18px;color:var(--muted)}
+.sbox input{flex:1;border:0;background:none;color:var(--fg);font:inherit;font-size:16px;padding:12px 0;outline:none;min-width:0}
+.sec{font-size:.8rem;font-weight:700;color:var(--muted);margin:16px 2px 8px;display:flex;justify-content:space-between;align-items:center}
+.org{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line2);border-radius:14px;padding:11px 12px;margin-bottom:8px}
+.av{width:38px;height:38px;border-radius:11px;background:var(--accentbg);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:.85rem;flex:none}
+.org .nm{font-weight:600;font-size:.9rem;line-height:1.3}
+.org .sm{font-size:.74rem;color:var(--muted)}
+.org .tx{flex:1;min-width:0}
+.fbtn{flex:none;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:999px;padding:6px 12px;font-size:.8rem;font-weight:700;cursor:pointer;display:inline-flex;gap:5px;align-items:center}
+.fbtn svg{width:15px;height:15px}
+.fbtn.on{background:var(--accent);color:#fff}
+.fbtn.rm{border-color:#e11d48;color:#e11d48}
+.fbtn[disabled]{opacity:.55}
+.hint{font-size:.8rem;color:var(--muted);padding:2px 2px 8px}
+.sugg{display:flex;flex-wrap:wrap;gap:6px}
+.msg{font-size:.85rem;padding:10px 12px;border-radius:12px;background:var(--accentbg);color:var(--accent);margin:8px 0}
+.msg.err{background:#fde8ec;color:#be123c}
+
+/* SETTINGS */
+.card{background:var(--panel);border:1px solid var(--line2);border-radius:14px;padding:4px 14px;margin-bottom:12px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line2)}
+.row:last-child{border-bottom:0}
+.row .tx{flex:1}.row .sm{font-size:.76rem;color:var(--muted)}
+.sw{position:relative;width:46px;height:28px;flex:none}
+.sw input{opacity:0;width:0;height:0}
+.sw span{position:absolute;inset:0;border-radius:999px;background:var(--line);transition:.2s}
+.sw span::after{content:'';position:absolute;width:22px;height:22px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw input:checked+span{background:var(--accent)}.sw input:checked+span::after{left:21px}
+
+/* NAV */
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav button{flex:1;border:0;background:none;padding:8px 0 9px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.7rem;font-weight:600;color:var(--muted);cursor:pointer;position:relative}
+nav button svg{width:22px;height:22px}
+nav button[aria-selected=true]{color:var(--accent)}
+nav .badge{position:absolute;top:4px;left:calc(50% + 6px);background:#e11d48;color:#fff;border-radius:999px;font-size:.62rem;min-width:16px;height:16px;padding:0 4px;display:grid;place-items:center}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="top-r">
+ <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6.5L4.6 18.2A2 2 0 0 0 6.3 21h11.4a2 2 0 0 0 1.7-2.8L14 9.5V3"/><path d="M7.5 15h9"/></svg></div>
+ <div><h1 id="t-title">Bảng tin</h1><div class="st" id="t-st">Đấu thầu XN</div></div>
+ <button class="ibtn" id="b-check" type="button" aria-label="Kiểm tra ngay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
+</div></header>
+
+<!-- KHÔNG PHẢI APP -->
+<section id="v-web" hidden><div class="empty">
+ <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div>
+ <h3>Trang này dành cho app Android</h3>
+ <p>Cài app "Đấu thầu XN" để follow bệnh viện và nhận thông báo báo giá, TBMT, mở thầu, kết quả lựa chọn nhà thầu.</p>
+ <p><a class="btn" href="app/dauthau.apk" download>Tải app Android</a></p>
+ <p><a href="./">Xem trang theo dõi thầu XN</a></p>
+</div></section>
+
+<!-- BẢNG TIN -->
+<section id="v-feed" hidden>
+ <div class="chips" id="f-kind"></div>
+ <div class="chips" id="f-org" style="padding-top:2px"></div>
+ <div class="wrap" id="feed"></div>
+</section>
+
+<!-- THEO DÕI -->
+<section id="v-follow" hidden><div class="wrap">
+ <div class="sbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Tìm bệnh viện, TTYT, CDC…" autocomplete="off" enterkeyhint="search"></div>
+ <div class="hint">Gõ tên đơn vị rồi bấm tìm. Kết quả gom theo mã đơn vị trên muasamcong, nên trùng tên vẫn phân biệt được.</div>
+ <div id="res"></div>
+ <div class="sec"><span>Đang theo dõi <span id="n-fl"></span></span></div>
+ <div id="fl"></div>
+ <div id="sg-wrap" hidden><div class="sec"><span>Gợi ý từ các gói thầu xét nghiệm gần đây</span></div><div class="sugg" id="sg"></div></div>
+</div></section>
+
+<!-- CÀI ĐẶT -->
+<section id="v-set" hidden><div class="wrap">
+ <div class="sec"><span>Thông báo khi bệnh viện đang theo dõi</span></div>
+ <div class="card" id="prefs"></div>
+ <div class="sec"><span>Trạng thái</span></div>
+ <div class="card">
+  <div class="row"><div class="tx"><div>Quyền thông báo</div><div class="sm" id="s-notif">—</div></div><button class="btn ghost" id="b-notif" type="button" hidden>Bật</button></div>
+  <div class="row"><div class="tx"><div>Lần kiểm tra gần nhất</div><div class="sm" id="s-last">—</div></div></div>
+  <div class="row"><div class="tx"><div>Tần suất</div><div class="sm">Khoảng 30 phút một lần khi có mạng, kể cả lúc tắt app. Nếu thông báo đến trễ, vào Cài đặt điện thoại → Pin → cho phép app "Đấu thầu XN" chạy nền không giới hạn.</div></div></div>
+  <div class="row"><div class="tx"><div>Dữ liệu</div><div class="sm">Lấy trực tiếp từ muasamcong.mof.gov.vn. Danh sách theo dõi lưu ngay trên điện thoại.</div></div></div>
+  <div class="row"><div class="tx"><div>Phiên bản</div><div class="sm" id="s-ver">—</div></div></div>
+ </div>
+</div></section>
+
+<nav id="nav" hidden>
+ <button type="button" data-v="feed" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Bảng tin<span class="badge" id="nb" hidden></span></button>
+ <button type="button" data-v="follow" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>Theo dõi</button>
+ <button type="button" data-v="web" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6.5L4.6 18.2A2 2 0 0 0 6.3 21h11.4a2 2 0 0 0 1.7-2.8L14 9.5V3"/></svg>Thầu XN</button>
+ <button type="button" data-v="set" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Cài đặt</button>
+</nav>
+
+<script>
+const $=(i)=>document.getElementById(i);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e};
+const A=window.DauThauApp;
+const KIND={ycbg:'Báo giá',tbmt:'TBMT/HSMT',open:'Mở thầu',kq:'KQLCNT'};
+const KLONG={ycbg:'Đăng tải yêu cầu báo giá',tbmt:'Đăng tải TBMT/HSMT',open:'Mở thầu',kq:'Đăng tải kết quả LCNT'};
+let S={follows:[],feed:[],prefs:{}},view='feed',fk='',fo='';
+const CBS={};let cbn=0;
+window.DT_CB=(id,d)=>{const f=CBS[id];delete CBS[id];if(f)f(d)};
+const call=(fn,...a)=>new Promise((res)=>{const id='c'+(++cbn);CBS[id]=res;A[fn](...a,id)});
+const fmtN=(v)=>Number(v).toLocaleString('vi-VN');
+const pd=(s)=>{if(!s)return null;const m=/^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)/.exec(s);return m?new Date(+m[1],m[2]-1,+m[3],+m[4],+m[5]):null};
+const hm=(d)=>String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+const dm=(d)=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
+const dayLabel=(d)=>{const t=new Date();t.setHours(0,0,0,0);const x=new Date(d);x.setHours(0,0,0,0);const k=Math.round((t-x)/864e5);return k===0?'Hôm nay':k===1?'Hôm qua':['CN','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'][x.getDay()]+', '+dm(x)};
+const ago=(t)=>{if(!t)return'chưa kiểm tra';const m=Math.round((Date.now()-t)/6e4);return m<1?'vừa xong':m<60?m+' phút trước':m<1440?Math.round(m/60)+' giờ trước':dm(new Date(t))+' '+hm(new Date(t))};
+const ini=(n)=>{const w=n.replace(/^(Bệnh viện|Trung tâm|Viện|Sở|Công ty)\s+/i,'').split(/\s+/).filter(Boolean);return ((w[0]||'?')[0]+((w[1]||'')[0]||'')).toUpperCase()};
+
+function load(){if(!A)return;try{S=JSON.parse(A.state())}catch(e){}render()}
+function render(){const unread=S.feed.filter((e)=>!e.read).length;$('nb').hidden=!unread;$('nb').textContent=unread>99?'99+':unread;
+ $('t-st').textContent=(S.follows.length?'Theo dõi '+S.follows.length+' đơn vị · ':'')+'kiểm tra '+ago(S.lastCheck)+(S.lastError?' · lỗi: '+S.lastError:'');
+ if(view==='feed')drawFeed();if(view==='follow')drawFollow();if(view==='set')drawSet()}
+
+function drawFeed(){
+ const kinds=[['','Tất cả']].concat(Object.entries(KIND));const cnt=(k)=>S.feed.filter((e)=>(!k||e.kind===k)&&(!fo||e.code===fo)).length;
+ $('f-kind').replaceChildren(...kinds.map(([k,l])=>{const b=el('button','chip',l);b.type='button';b.setAttribute('aria-pressed',String(fk===k));b.append(el('b',null,cnt(k)));b.onclick=()=>{fk=k;drawFeed()};return b}));
+ const orgs=S.follows;$('f-org').hidden=orgs.length<2;
+ $('f-org').replaceChildren(...[{code:'',name:'Mọi đơn vị'}].concat(orgs).map((o)=>{const b=el('button','chip',o.code?o.name.replace(/^Bệnh viện /,'BV ').replace(/^Trung tâm y tế /i,'TTYT '):o.name);b.type='button';b.setAttribute('aria-pressed',String(fo===o.code));b.onclick=()=>{fo=o.code;drawFeed()};return b}));
+ const box=$('feed');
+ if(!S.follows.length){box.replaceChildren(emptyBox('Chưa theo dõi bệnh viện nào','Follow các bệnh viện anh quan tâm, app sẽ báo khi họ đăng báo giá, TBMT/HSMT, mở thầu hoặc có kết quả lựa chọn nhà thầu.','Tìm bệnh viện để theo dõi',()=>go('follow')));return}
+ const list=S.feed.filter((e)=>(!fk||e.kind===fk)&&(!fo||e.code===fo));
+ if(!list.length){box.replaceChildren(emptyBox('Chưa có hoạt động','Trong 14 ngày gần đây chưa thấy hoạt động phù hợp. App sẽ tự kiểm tra và báo khi có mới.'));return}
+ const out=[];let last='';
+ list.slice(0,250).forEach((e)=>{const d=pd(e.date);const lb=d?dayLabel(d):'';if(lb!==last){out.push(el('div','day',lb));last=lb}out.push(card(e,d))});
+ box.replaceChildren(...out)}
+function card(e,d){const c=el('div','ev'+(e.read?'':' new'));
+ const h=el('div','ev-h');h.append(el('span','kind k-'+e.kind,KIND[e.kind]||e.kind),el('span','inv',e.investor));h.append(el('span','time',d?hm(d):''));c.append(h);
+ c.append(el('div','ttl',e.kind==='ycbg'&&e.sub&&e.sub!==e.title?e.sub:e.title));
+ if(e.kind==='ycbg'&&e.sub&&e.sub!==e.title)c.append(Object.assign(el('div','meta'),{textContent:e.title}));
+ const m=el('div','meta');const add=(l,v)=>{if(!v)return;const s=el('span');s.append(l+' ',Object.assign(el('b'),{textContent:v}));m.append(s)};
+ add('Mã',e.no);const cl=pd(e.close);if(cl&&(e.kind==='ycbg'||e.kind==='tbmt'))add(e.kind==='ycbg'?'Hạn báo giá':'Đóng thầu',hm(cl)+' '+dm(cl));
+ if(e.budget&&e.kind!=='kq')add('Giá gói',fmtN(e.budget));c.append(m);
+ if(e.kind==='kq'&&(e.winner||e.price)){const w=el('div','win');if(e.winner)w.append('Trúng: ',Object.assign(el('b'),{textContent:e.winner}));if(e.price)w.append(e.winner?' · ':'','Giá trúng ',Object.assign(el('b'),{textContent:fmtN(e.price)+' đ'}));c.append(w)}
+ c.onclick=()=>A.openUrl(e.url);return c}
+function emptyBox(t,p,btn,fn){const d=el('div','empty');const b=el('div','big');b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>';d.append(b,el('h3',null,t),el('p',null,p));if(btn){const x=el('button','btn',btn);x.type='button';x.onclick=fn;d.append(x)}return d}
+
+/* THEO DÕI */
+let lastRes=null;
+function orgRow(o,mode){const r=el('div','org');r.append(el('div','av',ini(o.name)));const tx=el('div','tx');tx.append(el('div','nm',o.name));
+ const sm=[];if(o.prov)sm.push(o.prov);if(o.n)sm.push(o.n+' gói/báo giá gần đây');if(mode==='fl'){const n=S.feed.filter((e)=>e.code===o.code).length;sm.push(n+' hoạt động trong bảng tin')}sm.push(o.code);tx.append(el('div','sm',sm.join(' · ')));r.append(tx);
+ const followed=S.follows.some((f)=>f.code===o.code);const b=el('button','fbtn'+(followed?' on':''));b.type='button';
+ const setB=(on)=>{b.className='fbtn'+(on?' on':'');b.innerHTML=on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Đang theo dõi':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Theo dõi'};
+ setB(followed);let armed=false;
+ b.onclick=async()=>{const on=S.follows.some((f)=>f.code===o.code);
+  if(on){if(!armed){armed=true;b.className='fbtn rm';b.textContent='Bỏ theo dõi?';setTimeout(()=>{if(armed){armed=false;setB(true)}},3000);return}armed=false;A.unfollow(o.code);setB(false);load();return}
+  b.disabled=true;b.textContent='Đang lấy dữ liệu…';const r=await call('follow',o.code,o.name);b.disabled=false;
+  if(r&&r.error){toast('Không lấy được dữ liệu: '+r.error,true);}else toast('Đã theo dõi '+o.name+(r&&r.history?' · '+r.history+' hoạt động 14 ngày qua đã vào bảng tin':''));load();setB(S.follows.some((f)=>f.code===o.code))};
+ r.append(b);return r}
+function drawFollow(){$('n-fl').textContent=S.follows.length?'('+S.follows.length+')':'';
+ $('fl').replaceChildren(...(S.follows.length?S.follows.map((o)=>orgRow(o,'fl')):[el('div','hint','Chưa có đơn vị nào. Tìm và bấm "Theo dõi" ở trên.')]));
+ if(lastRes)$('res').replaceChildren(...lastRes)}
+let toastT;function toast(t,err){let m=$('toast');if(!m){m=el('div');m.id='toast';m.style.cssText='position:fixed;left:16px;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:9';document.body.append(m)}m.className='msg'+(err?' err':'');m.textContent=t;m.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{m.hidden=true},3500)}
+async function doSearch(){const q=$('q').value.trim();if(q.length<2)return;$('q').blur();$('res').replaceChildren(el('div','msg','Đang tìm “'+q+'” trên muasamcong…'));
+ const r=await call('search',q);if(r.error){$('res').replaceChildren(el('div','msg err','Lỗi: '+r.error));return}
+ const items=(r.items||[]).slice(0,30);lastRes=items.length?[el('div','sec',null)].concat(items.map((o)=>orgRow(o,'res'))):[el('div','msg','Không tìm thấy đơn vị nào khớp “'+q+'”.')];
+ if(items.length)lastRes[0].append(el('span',null,'Kết quả ('+items.length+')'));$('res').replaceChildren(...lastRes)}
+$('q').addEventListener('keydown',(e)=>{if(e.key==='Enter')doSearch()});
+$('q').addEventListener('search',doSearch);
+/* Gợi ý: bên mời thầu xuất hiện trong dữ liệu thầu XN của web */
+fetch('data/start.json?v='+Date.now()).then((r)=>r.json()).then(async(a)=>{let b=[];try{b=await (await fetch('data/award.json')).json()}catch(e){}
+ const c={};[...a,...b].forEach((r)=>{if(r.investor)c[r.investor]=(c[r.investor]||0)+1});const top=Object.entries(c).sort((x,y)=>y[1]-x[1]).slice(0,14);
+ if(!top.length)return;$('sg-wrap').hidden=false;$('sg').replaceChildren(...top.map(([n])=>{const x=el('button','chip',n);x.type='button';x.onclick=()=>{$('q').value=n;doSearch();window.scrollTo({top:0})};return x}))}).catch(()=>{});
+
+/* CÀI ĐẶT */
+function drawSet(){$('prefs').replaceChildren(...Object.keys(KIND).map((k)=>{const r=el('div','row');const tx=el('div','tx');tx.append(el('div',null,KLONG[k]));const d={ycbg:'Đơn vị đăng yêu cầu báo giá mới (giai đoạn lập dự toán)',tbmt:'Thông báo mời thầu, phát hành HSMT',open:'Đến giờ mở thầu (đóng thầu)',kq:'Có quyết định phê duyệt KQLCNT, kèm nhà thầu và giá trúng'}[k];tx.append(el('div','sm',d));
+ const sw=el('label','sw');const i=el('input');i.type='checkbox';i.checked=S.prefs[k]!==false;i.onchange=()=>A.setPref(k,i.checked);sw.append(i,el('span'));r.append(tx,sw);return r}));
+ $('s-notif').textContent=S.notif?'Đã cho phép':'Chưa cho phép, app sẽ không hiện thông báo';$('b-notif').hidden=!!S.notif;
+ $('s-last').textContent=ago(S.lastCheck)+(S.lastError?' · lỗi: '+S.lastError:'');$('s-ver').textContent=S.version||'—'}
+$('b-notif').onclick=()=>{A.askNotif();setTimeout(load,2500)};
+
+/* ĐIỀU HƯỚNG */
+const TITLES={feed:'Bảng tin',follow:'Theo dõi bệnh viện',set:'Cài đặt'};
+function go(v){if(v==='web'){location.href='./';return}
+ if(view==='feed'&&v!=='feed'&&S.feed.some((e)=>!e.read)){A.markRead();S.feed.forEach((e)=>{e.read=true})}
+ view=v;document.querySelectorAll('nav button').forEach((b)=>b.setAttribute('aria-selected',String(b.dataset.v===v)));['feed','follow','set'].forEach((x)=>{$('v-'+x).hidden=x!==v});$('t-title').textContent=TITLES[v];try{sessionStorage.setItem('v',v)}catch(e){}window.scrollTo({top:0});render()}
+document.querySelectorAll('nav button').forEach((b)=>b.onclick=()=>go(b.dataset.v));
+$('b-check').onclick=async()=>{if(!A)return;const b=$('b-check');if(b.classList.contains('spin'))return;if(!S.follows.length){go('follow');return}b.classList.add('spin');const r=await call('check');b.classList.remove('spin');load();
+ toast(r.n<0?'Không kiểm tra được: '+(r.error||'lỗi mạng'):r.n?r.n+' hoạt động mới':'Chưa có hoạt động mới',r.n<0)};
+window.DT_RESUME=load;
+/* Báo có bản app mới */
+if(A&&A.version)fetch('app/version.json?v='+Date.now()).then((r)=>r.json()).then((v)=>{const cur=String(A.version()).split('.').map(Number),nw=String(v.version).split('.').map(Number);
+ const newer=nw.some((x,i)=>x>(cur[i]||0)&&nw.slice(0,i).every((y,j)=>y===(cur[j]||0)));if(!newer)return;const m=el('div','msg');m.style.margin='10px 16px 0';m.append('Có bản app mới '+v.version+(v.note?': '+v.note:'')+' ');const a=el('a',null,'Tải về');a.href='app/dauthau.apk';a.style.fontWeight='700';a.onclick=(e)=>{e.preventDefault();A.openUrl(location.origin+'/app/dauthau.apk')};m.append(a);document.querySelector('.top').after(m)}).catch(()=>{});
+if(A){$('nav').hidden=false;let v='feed';try{v=sessionStorage.getItem('v')||'feed'}catch(e){}load();go(v);setInterval(()=>{if(!document.hidden)load()},60000)}
+else{$('v-web').hidden=false;$('b-check').hidden=true;$('t-st').textContent='Theo dõi bệnh viện, nhận thông báo đấu thầu'}
+</script>
+</body>
+</html>

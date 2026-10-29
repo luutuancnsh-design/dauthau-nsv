@@ -34,6 +34,8 @@ a{color:var(--accent);text-decoration:none;font-weight:500}a:hover{text-decorati
 h1{margin:0;font-size:1.65rem;font-weight:700;letter-spacing:-.01em}
 .hero .sub{margin:2px 0 0;color:rgba(255,255,255,.78);font-size:.88rem}
 .hero .sub a{color:#fff;text-decoration:underline;text-underline-offset:2px}
+.hero-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:100%}
+.getapp{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#0f766e;border-radius:999px;padding:6px 14px;font-size:.82rem;font-weight:700;text-decoration:none;white-space:nowrap}.getapp svg{width:15px;height:15px}.getapp[hidden]{display:none}
 .stamp{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 14px;font-size:.82rem;display:flex;gap:8px;align-items:center;max-width:100%}
 .dot{width:8px;height:8px;border-radius:50%;background:#5eead4;box-shadow:0 0 0 3px rgba(94,234,212,.25)}
 
@@ -158,7 +160,7 @@ footer{text-align:center;color:var(--muted);font-size:.76rem;padding:6px 0 0}
 @media (max-width:720px){
  body{font-size:14px}
  .hero{padding:16px 14px 62px}h1{font-size:1.15rem}.logo{width:36px;height:36px;border-radius:10px}.logo svg{width:20px;height:20px}
- .hero .sub{display:none}.stamp{font-size:.74rem;padding:4px 10px}
+ .hero .sub{display:none}.stamp{font-size:.74rem;padding:4px 10px}.getapp{font-size:.74rem;padding:4px 10px}
  .wrap{padding:0 10px 28px;margin-top:-48px;gap:12px}
  .kpis{grid-template-columns:repeat(4,1fr);gap:6px}
  .kpi{flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px;border-radius:12px}
@@ -206,7 +208,8 @@ footer{text-align:center;color:var(--muted);font-size:.76rem;padding:6px 0 0}
   <div><h1>Theo dõi đấu thầu xét nghiệm</h1>
   <p class="sub">Huyết học · Sinh hóa · Miễn dịch · Đông máu · Sinh học phân tử… — nguồn <a href="https://muasamcong.mof.gov.vn/" target="_blank" rel="noopener">muasamcong.mof.gov.vn</a></p></div>
  </div>
- <div class="stamp"><span class="dot"></span><span>Cập nhật <b id="rp-date">—</b><span id="rp-asof"></span></span></div>
+ <div class="hero-r"><div class="stamp"><span class="dot"></span><span>Cập nhật <b id="rp-date">—</b><span id="rp-asof"></span></span></div>
+ <a class="getapp" id="getapp" href="app/dauthau.apk" download hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>Tải app Android</a></div>
 </div></header>
 
 <div class="wrap">
@@ -279,6 +282,8 @@ const fmt=(v)=>isNil(v)?'—':Number(v).toLocaleString('vi-VN');
 const tx=(v)=>isNil(v)?'—':String(v);
 const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e};
 const D={};let curDay='';
+/* Nút tải app: chỉ hiện trên Android trình duyệt, ẩn khi đang mở trong app */
+if(/DauThauApp/.test(navigator.userAgent)){const g=$('getapp');g.href='app.html';g.removeAttribute('download');g.lastChild.textContent='Bảng tin theo dõi';g.hidden=false}else if(/Android/i.test(navigator.userAgent))$('getapp').hidden=false;if(/[?&]app=1/.test(location.search))$('getapp').hidden=false;
 const LC={'Thiết bị':'l-tb','Hóa chất':'l-hc','Vật tư':'l-vt','Thuốc':'l-th'};
 const NH=window.NHAN||{nhan:()=>[],ORDER:[]};const ITAG={};
 const nhOf=(r)=>{if(r._nh)return r._nh;const t=[r.name,...(r.goods||[]).map((g)=>[g.item,g.model,g.kmh,g.hang].join(' '))].join(' \n ');const s=new Set([...(r.nhan||[]),...NH.nhan(t),...(ITAG[r.notifyNo]||[])]);return r._nh=NH.sort?NH.sort([...s]):[...s]};
@@ -299,7 +304,7 @@ const urlOf=(r)=>{if(!r.lk)return '';const a=linkOf(r.notifyNo,r.lk);return a.hr
 const DLI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>';
 const whenCell=(v,label)=>{const td=el('td','when');td.dataset.k='meta';td.dataset.l=label;if(isNil(v)){td.textContent='—';return td}const [d,t]=String(v).split(' ');td.append(el('b',null,t||''),document.createTextNode(' '+(d||'')));return td};
 const ch5Cell=(r,x)=>{const td=el('td');td.dataset.k='dl';const f=formOf(r),u=urlOf(r);
- if(x.ch5&&x.ch5.id){const a=el('a','dl');a.href='https://muasamcong.mof.gov.vn/api/unau/edocproxy/file/share/'+encodeURIComponent(x.ch5.id);a.rel='noopener';a.setAttribute('download','');a.title='Tải '+x.ch5.name;a.innerHTML=DLI+'<span>Tải Chương V</span>';td.append(a);td.append(el('span','dlname',x.ch5.name));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
+ if(x.ch5&&x.ch5.id){const a=el('a','dl');a.href='https://muasamcong.mof.gov.vn/api/unau/edocproxy/file/share/'+encodeURIComponent(x.ch5.id);a.rel='noopener';a.setAttribute('download','');a.title='Tải '+x.ch5.name;a.innerHTML=DLI+'<span>Tải Chương V</span>';if(window.DauThauApp)a.addEventListener('click',(e)=>{e.preventDefault();window.DauThauApp.download(a.href,x.ch5.name||'Chuong V')});td.append(a);td.append(el('span','dlname',x.ch5.name));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
  if(f==='CGTTRG'){td.append(el('span','noc5','Không có (chào giá rút gọn)'));if(u){const m=el('a','dlalt','Xem YCKT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
  if(f==='DTRR'||f==='CHCT'){td.append(el('span','noc5','Chưa lấy được file'));if(u){const m=el('a','dlalt','Mở HSMT trên muasamcong');m.href=u;m.target='_blank';m.rel='noopener';td.append(m)}return td}
  td.append(el('span','noc5','—'));return td};
