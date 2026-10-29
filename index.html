@@ -477,7 +477,8 @@ let tmr;function awDraw(reset){if(reset)AL.cap=100;const q=$('a-q').value.trim()
 $('a-q').addEventListener('input',()=>{clearTimeout(tmr);tmr=setTimeout(()=>awDraw(true),180)});['a-loai','a-sp','a-tag'].forEach((i)=>$(i).addEventListener('change',()=>awDraw(true)));
 $('a-more').addEventListener('click',()=>{AL.cap+=100;awDraw(false)});
 function awBuild(){AL.rows=[...(D.equip||[]).map((r)=>({...r,loai:'Thiết bị'})),...(D.supply||[])].map((r)=>{const nh=NH.nhan([r.item,r.model,r.kmh,r.hang].join(' '));if(nh.length&&r.notifyNo)ITAG[r.notifyNo]=[...new Set([...(ITAG[r.notifyNo]||[]),...nh])];return {...r,_nh:nh,hay:[r.item,r.model,r.kmh,r.hang,r.xuatxu,r.winner,r.investor,r.notifyNo,nh.join(' ')].join(' ').toLowerCase()}}).sort((a,b)=>dkey(b.date).localeCompare(dkey(a.date)));(D.award||[]).forEach((r)=>{delete r._nh});nhFill('a-tag',[...(D.award||[]),...AL.rows]);AL.ready=true;$('k-equip').textContent=AL.rows.length.toLocaleString('vi-VN');awDraw(true)}
-function tab(t){document.querySelectorAll('[data-tab]').forEach((b)=>b.setAttribute('aria-selected',String(b.dataset.tab===t)));$('pane-today').hidden=t!=='today';$('pane-award').hidden=t!=='award';$('pane-follow').hidden=t!=='follow';['g-q','g-day','l-loai','l-sp','l-mr','l-tag','day-info'].forEach((i)=>{$(i).hidden=t!=='today'});history.replaceState(null,'',t==='award'?'#trungthau':t==='follow'?'#theodoi':'#homnay');if(t==='follow')FW.show();else FW.leave()}
+const INAPP=/DauThauApp/.test(navigator.userAgent);
+function tab(t){if(INAPP&&t==='follow')t='today';document.querySelectorAll('[data-tab]').forEach((b)=>b.setAttribute('aria-selected',String(b.dataset.tab===t)));$('pane-today').hidden=t!=='today';$('pane-award').hidden=t!=='award';$('pane-follow').hidden=t!=='follow';['g-q','g-day','l-loai','l-sp','l-mr','l-tag','day-info'].forEach((i)=>{$(i).hidden=t!=='today'});history.replaceState(null,'',t==='award'?'#trungthau':t==='follow'?'#theodoi':'#homnay');if(t==='follow')FW.show();else FW.leave()}
 document.querySelectorAll('[data-tab]').forEach((b)=>b.addEventListener('click',()=>tab(b.dataset.tab)));
 document.querySelectorAll('.kpi').forEach((k)=>k.addEventListener('click',()=>{const g=k.dataset.go;if(g==='award'){tab('award');window.scrollTo({top:$('toolbar').offsetTop-4})}else{tab('today');$(g).scrollIntoView({block:'start'})}}));
 new IntersectionObserver(([e])=>$('toolbar').classList.toggle('stuck',e.intersectionRatio<1),{threshold:[1],rootMargin:'-1px 0px 0px 0px'}).observe($('toolbar'));
@@ -486,7 +487,7 @@ const get=(n)=>fetch('data/'+n+'.json?v='+Date.now()).then((r)=>r.json()).then((
 // Tải dữ liệu nhẹ trước để trang hiện nhanh, dữ liệu hàng hóa (lớn) tải sau
 Promise.all(['start','close','results','award','report','detail','match'].map(get)).then(()=>{
  const r=(D.report||[])[0];if(r){$('rp-date').textContent=r.date?vnDate(r.date):'—';$('rp-asof').textContent=r.asOf?', '+r.asOf:''}
- nhFill('f-tag',[...(D.start||[]),...(D.close||[]),...(D.results||[])]);nhFill('a-tag',D.award||[]);const l=dayList();setDay(l.length?l[l.length-1]:'');const uq=new URLSearchParams(location.search).get('q');if(uq){$('f-q').value=uq;draw()}FW.init();tab(location.hash==='#trungthau'?'award':location.hash==='#theodoi'?'follow':'today');awDraw(true);
+ nhFill('f-tag',[...(D.start||[]),...(D.close||[]),...(D.results||[])]);nhFill('a-tag',D.award||[]);const l=dayList();setDay(l.length?l[l.length-1]:'');const uq=new URLSearchParams(location.search).get('q');if(uq){$('f-q').value=uq;draw()}if(INAPP){$('tab-follow').hidden=true}else FW.init();tab(location.hash==='#trungthau'?'award':location.hash==='#theodoi'?'follow':'today');awDraw(true);
  Promise.all(['equip','supply'].map(get)).then(awBuild);
 });
 </script>
