@@ -93,12 +93,13 @@ table.ctt td.n{text-align:right;white-space:nowrap}
     if (g.children.length) { const s = sec('Thông tin chung'); s.append(g); body.append(s); }
 
     const files = E('div', 'ct-files');
-    if (d.file && d.file.id) files.append(fileLink(d.file, yc ? 'File yêu cầu báo giá' : 'Chương V'));
+    if (d.files && d.files.length) d.files.forEach((f) => files.append(fileLink(f, f.nhan || 'Tệp đính kèm')));
+    else if (d.file && d.file.id) files.append(fileLink(d.file, yc ? 'File yêu cầu báo giá' : 'Chương V'));
     else if (h.ch5 && h.ch5.id) files.append(fileLink({ id: h.ch5.id, ten: h.ch5.name }, 'Chương V'));
     if (d.qd && d.qd.id) files.append(fileLink(d.qd, 'QĐ phê duyệt HSMT'));
     if (d.kq && d.kq.qd && d.kq.qd.id) files.append(fileLink(d.kq.qd, 'QĐ phê duyệt KQLCNT'));
     if (d.kq && d.kq.qd_huy && d.kq.qd_huy.id) files.append(fileLink(d.kq.qd_huy, 'QĐ hủy thầu'));
-    if (files.children.length) { const s = sec('Hồ sơ đính kèm'); s.append(files); body.append(s); }
+    if (files.children.length) { const s = sec(yc ? 'Tệp đính kèm của yêu cầu báo giá' : 'Hồ sơ đính kèm'); s.append(files); if (yc) body.insertBefore(s, body.firstChild && body.firstChild.classList && body.firstChild.classList.contains('ct-info') ? body.firstChild.nextSibling : body.firstChild); else body.append(s); }
 
     if (window.D && window.D.match && window.D.match[no] && window.mtChips) { const s = sec('Đối chiếu thiết bị đang cung cấp'); const b = E('div'); window.mtChips(b, { notifyNo: no, investor: d.bmt || h.bmt }); s.append(b); body.append(s); }
 
@@ -154,7 +155,17 @@ table.ctt td.n{text-align:right;white-space:nowrap}
     return x;
   }
 
+  /* Nút tải nhanh tệp đính kèm trên thẻ bảng tin (chủ yếu cho YCBG) */
+  async function quick(no, btn, hint) {
+    const old = btn.textContent; btn.textContent = 'Đang lấy tệp…'; btn.disabled = true;
+    let d = null; try { const r = await fetch('data/ct/' + encodeURIComponent(no) + '.json?v=' + Date.now()); if (r.ok) d = await r.json(); } catch (e) { }
+    btn.textContent = old; btn.disabled = false;
+    const fl = d ? ((d.files && d.files.length) ? d.files : (d.file && d.file.id ? [d.file] : [])) : [];
+    if (fl.length === 1) { fileLink(fl[0], '').click(); return; }
+    window.CT.open(no, hint);
+  }
   window.CT = {
+    quick,
     async open(no, hint) {
       const bg = E('div', 'ctbg'), box = E('div', 'ct'); bg.append(box); document.body.append(bg);
       const prevOverflow = document.body.style.overflow; document.body.style.overflow = 'hidden';

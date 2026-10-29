@@ -57,6 +57,7 @@ svg{flex:none}
 .ttl{font-size:.92rem;font-weight:600;line-height:1.35}
 .meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.76rem;color:var(--muted);margin-top:6px}
 .meta b{color:var(--fg);font-weight:600}
+.qdl{margin-top:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:9px;padding:5px 11px;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer}.qdl:disabled{opacity:.6}
 .win{margin-top:6px;font-size:.8rem;background:var(--k-kq-bg);color:var(--k-kq);border-radius:8px;padding:5px 9px}
 .win b{font-weight:700}
 
@@ -258,6 +259,7 @@ function card(e,d){const c=el('div','ev'+(e.read?'':' new'));
  add('Mã',e.no);const cl=pd(e.close);if(cl&&(e.kind==='ycbg'||e.kind==='tbmt'))add(e.kind==='ycbg'?'Hạn báo giá':'Đóng thầu',hm(cl)+' '+dm(cl));
  if(e.budget&&e.kind!=='kq')add('Giá gói',fmtN(e.budget));c.append(m);
  if(e.kind==='kq'&&(e.winner||e.price)){const w=el('div','win');if(e.winner)w.append('Trúng: ',Object.assign(el('b'),{textContent:e.winner}));if(e.price)w.append(e.winner?' · ':'','Giá trúng ',Object.assign(el('b'),{textContent:fmtN(e.price)+' đ'}));c.append(w)}
+ if(e.kind==='ycbg'&&window.CT){const q=el('button','qdl','⬇ Tải file báo giá');q.type='button';q.onclick=(x)=>{x.stopPropagation();CT.quick(e.no,q,{ten:e.title,bmt:e.investor,dang:e.date,dong:e.close})};c.append(q)}
  c.onclick=()=>openCt(e);return c}
 function emptyBox(t,p,btn,fn){const d=el('div','empty');const b=el('div','big');b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>';d.append(b,el('h3',null,t),el('p',null,p));if(btn){const x=el('button','btn',btn);x.type='button';x.onclick=fn;d.append(x)}return d}
 
