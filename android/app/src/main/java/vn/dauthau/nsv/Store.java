@@ -60,7 +60,7 @@ public class Store {
             String k = e.optString("key");
             if (k.isEmpty() || seen.contains(k)) continue;
             seen.add(k);
-            try { e.put("read", read); } catch (JSONException ignored) {}
+            try { e.put("read", read).put("at", System.currentTimeMillis()); if (read) e.put("hist", true); } catch (JSONException ignored) {}
             fresh.add(e);
         }
         if (fresh.isEmpty()) return fresh;

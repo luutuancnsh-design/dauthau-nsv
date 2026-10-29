@@ -20,17 +20,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/** Chạy nền khoảng 30 phút/lần: kiểm tra hoạt động mới của các bệnh viện đang follow và gửi thông báo. */
+/** Chạy nền khoảng 15 phút/lần: kiểm tra hoạt động mới của các bệnh viện đang follow và gửi thông báo. */
 public class CheckJob extends JobService {
     static final int JOB_ID = 2601;
     static final String CH = "hoatdong";
 
     static void schedule(Context c) {
         JobScheduler js = (JobScheduler) c.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        for (JobInfo j : js.getAllPendingJobs()) if (j.getId() == JOB_ID) return;
+        long period = 15 * 60 * 1000L; // mức tối thiểu Android cho phép
+        for (JobInfo j : js.getAllPendingJobs()) if (j.getId() == JOB_ID) { if (j.getIntervalMillis() == period) return; js.cancel(JOB_ID); }
         js.schedule(new JobInfo.Builder(JOB_ID, new ComponentName(c, CheckJob.class))
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setPeriodic(30 * 60 * 1000L)
+                .setPeriodic(period)
                 .setPersisted(true)
                 .build());
     }

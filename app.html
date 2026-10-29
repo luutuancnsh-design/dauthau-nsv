@@ -33,7 +33,7 @@ svg{flex:none}
 .logo svg{width:22px;height:22px}
 .top h1{margin:0;font-size:1.15rem;font-weight:700;line-height:1.2}
 .top .st{font-size:.76rem;color:rgba(255,255,255,.78)}
-.ibtn{margin-left:auto;width:40px;height:40px;border-radius:12px;border:0;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer}
+.ibtn{width:40px;height:40px;border-radius:12px;border:0;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer}
 .ibtn svg{width:20px;height:20px}
 .ibtn.spin svg{animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
 
@@ -100,8 +100,32 @@ svg{flex:none}
 .sw span::after{content:'';position:absolute;width:22px;height:22px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .sw input:checked+span{background:var(--accent)}.sw input:checked+span::after{left:21px}
 
+/* CHUÔNG */
+.ibtn{position:relative}.ibtn+.ibtn{margin-left:8px}
+.bdg{position:absolute;top:-4px;right:-4px;background:#e11d48;color:#fff;border-radius:999px;font-size:.62rem;font-weight:700;min-width:18px;height:18px;padding:0 4px;display:grid;place-items:center;border:2px solid var(--hero2)}
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:20}
+.sheet{position:fixed;left:0;right:0;top:0;max-height:82vh;background:var(--bg);z-index:21;border-radius:0 0 18px 18px;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.25);animation:dn .18s ease-out}
+@keyframes dn{from{transform:translateY(-14px);opacity:.4}}
+.sheet-h{background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;padding:16px;display:flex;align-items:center;gap:10px}
+.sheet-h h2{margin:0;font-size:1.05rem;flex:1}
+.sheet-h button{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:10px;padding:6px 12px;font-weight:600;cursor:pointer}
+.sheet-b{overflow-y:auto;padding:10px 12px 14px}
+.nt{display:flex;gap:10px;background:var(--panel);border:1px solid var(--line2);border-radius:12px;padding:10px 12px;margin-bottom:6px;cursor:pointer}
+.nt.new{border-color:var(--accent);background:var(--accentbg)}
+.nt .tx{flex:1;min-width:0}.nt .l1{display:flex;gap:6px;align-items:center;font-size:.76rem;color:var(--muted)}
+.nt .l1 .inv{flex:1}
+.nt .t{font-size:.86rem;font-weight:600;line-height:1.35;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nt .go{color:var(--muted);align-self:center}.nt .go svg{width:18px;height:18px}
+.banner{position:fixed;left:10px;right:10px;top:10px;z-index:30;background:var(--panel);color:var(--fg);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.25);padding:12px 14px;display:flex;gap:10px;align-items:flex-start;cursor:pointer;animation:dn .2s ease-out;border-left:4px solid var(--accent)}
+.banner .ic{width:34px;height:34px;border-radius:10px;background:var(--accentbg);color:var(--accent);display:grid;place-items:center;flex:none}.banner .ic svg{width:18px;height:18px}
+.banner .tx{flex:1;min-width:0}.banner .a{font-size:.74rem;color:var(--muted)}.banner .b{font-size:.86rem;font-weight:600;line-height:1.35}
+/* THẦU XN */
+#v-web2 iframe{position:fixed;left:0;right:0;top:0;width:100%;height:calc(100% - 58px - env(safe-area-inset-bottom));border:0;background:var(--bg)}
+body.webtab .top{display:none}
+.addbar{display:flex;gap:8px;align-items:center;margin:12px 0 4px}
+
 /* NAV */
-nav{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav{position:fixed;left:0;right:0;bottom:0;height:calc(58px + env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:6}
 nav button{flex:1;border:0;background:none;padding:8px 0 9px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.7rem;font-weight:600;color:var(--muted);cursor:pointer;position:relative}
 nav button svg{width:22px;height:22px}
 nav button[aria-selected=true]{color:var(--accent)}
@@ -113,7 +137,8 @@ nav .badge{position:absolute;top:4px;left:calc(50% + 6px);background:#e11d48;col
 <header class="top"><div class="top-r">
  <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6.5L4.6 18.2A2 2 0 0 0 6.3 21h11.4a2 2 0 0 0 1.7-2.8L14 9.5V3"/><path d="M7.5 15h9"/></svg></div>
  <div><h1 id="t-title">Bảng tin</h1><div class="st" id="t-st">Đấu thầu XN</div></div>
- <button class="ibtn" id="b-check" type="button" aria-label="Kiểm tra ngay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
+ <button class="ibtn" id="b-bell" type="button" aria-label="Thông báo" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="bdg" id="bell-n" hidden></span></button>
+ <button class="ibtn" id="b-check" type="button" aria-label="Kiểm tra ngay" style="margin-left:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
 </div></header>
 
 <!-- KHÔNG PHẢI APP -->
@@ -134,13 +159,22 @@ nav .badge{position:absolute;top:4px;left:calc(50% + 6px);background:#e11d48;col
 
 <!-- THEO DÕI -->
 <section id="v-follow" hidden><div class="wrap">
- <div class="sbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Tìm bệnh viện, TTYT, CDC…" autocomplete="off" enterkeyhint="search"></div>
- <div class="hint">Gõ tên đơn vị rồi bấm tìm. Kết quả gom theo mã đơn vị trên muasamcong, nên trùng tên vẫn phân biệt được.</div>
- <div id="res"></div>
- <div class="sec"><span>Đang theo dõi <span id="n-fl"></span></span></div>
- <div id="fl"></div>
- <div id="sg-wrap" hidden><div class="sec"><span>Gợi ý từ các gói thầu xét nghiệm gần đây</span></div><div class="sugg" id="sg"></div></div>
+ <div id="fl-list">
+  <div class="addbar"><button class="btn" id="b-add" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Thêm bệnh viện</button></div>
+  <div class="sec"><span>Đang theo dõi <span id="n-fl"></span></span></div>
+  <div id="fl"></div>
+ </div>
+ <div id="fl-add" hidden>
+  <div class="sbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Tìm bệnh viện, TTYT, CDC…" autocomplete="off" enterkeyhint="search"></div>
+  <div class="hint">Gõ tên đơn vị rồi bấm tìm. Kết quả gom theo mã đơn vị trên muasamcong, nên trùng tên vẫn phân biệt được.</div>
+  <div id="res"></div>
+  <div id="sg-wrap" hidden><div class="sec"><span>Gợi ý từ các gói thầu xét nghiệm gần đây</span></div><div class="sugg" id="sg"></div></div>
+  <p style="text-align:center;margin-top:18px"><button class="btn ghost" id="b-done" type="button">Xong, về danh sách theo dõi</button></p>
+ </div>
 </div></section>
+
+<!-- THẦU XN -->
+<section id="v-web2" hidden></section>
 
 <!-- CÀI ĐẶT -->
 <section id="v-set" hidden><div class="wrap">
@@ -150,14 +184,14 @@ nav .badge{position:absolute;top:4px;left:calc(50% + 6px);background:#e11d48;col
  <div class="card">
   <div class="row"><div class="tx"><div>Quyền thông báo</div><div class="sm" id="s-notif">—</div></div><button class="btn ghost" id="b-notif" type="button" hidden>Bật</button></div>
   <div class="row"><div class="tx"><div>Lần kiểm tra gần nhất</div><div class="sm" id="s-last">—</div></div></div>
-  <div class="row"><div class="tx"><div>Tần suất</div><div class="sm">Khoảng 30 phút một lần khi có mạng, kể cả lúc tắt app. Nếu thông báo đến trễ, vào Cài đặt điện thoại → Pin → cho phép app "Đấu thầu XN" chạy nền không giới hạn.</div></div></div>
+  <div class="row"><div class="tx"><div>Tần suất</div><div class="sm">Khi đang mở app: 3 phút một lần. Khi tắt app: khoảng 15 phút một lần (Android có thể giãn ra khi máy để yên). Nếu thông báo đến trễ, vào Cài đặt điện thoại → Pin → cho phép app "Đấu thầu XN" chạy nền không giới hạn.</div></div></div>
   <div class="row"><div class="tx"><div>Dữ liệu</div><div class="sm">Lấy trực tiếp từ muasamcong.mof.gov.vn. Danh sách theo dõi lưu ngay trên điện thoại.</div></div></div>
   <div class="row"><div class="tx"><div>Phiên bản</div><div class="sm" id="s-ver">—</div></div></div>
  </div>
 </div></section>
 
 <nav id="nav" hidden>
- <button type="button" data-v="feed" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Bảng tin<span class="badge" id="nb" hidden></span></button>
+ <button type="button" data-v="feed" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Bảng tin</button>
  <button type="button" data-v="follow" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>Theo dõi</button>
  <button type="button" data-v="web" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6.5L4.6 18.2A2 2 0 0 0 6.3 21h11.4a2 2 0 0 0 1.7-2.8L14 9.5V3"/></svg>Thầu XN</button>
  <button type="button" data-v="set" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Cài đặt</button>
@@ -182,7 +216,23 @@ const ago=(t)=>{if(!t)return'chưa kiểm tra';const m=Math.round((Date.now()-t)
 const ini=(n)=>{const w=n.replace(/^(Bệnh viện|Trung tâm|Viện|Sở|Công ty)\s+/i,'').split(/\s+/).filter(Boolean);return ((w[0]||'?')[0]+((w[1]||'')[0]||'')).toUpperCase()};
 
 function load(){if(!A)return;try{S=JSON.parse(A.state())}catch(e){}render()}
-function render(){const unread=S.feed.filter((e)=>!e.read).length;$('nb').hidden=!unread;$('nb').textContent=unread>99?'99+':unread;
+/* Thông báo (chuông): sự kiện phát hiện khi kiểm tra định kỳ, không tính lịch sử lúc mới follow */
+const bellList=()=>{const hasAt=S.feed.some((e)=>e.at);const l=S.feed.filter((e)=>hasAt?(e.at&&!e.hist):true);return l.sort((a,b)=>(b.at||0)-(a.at||0)||String(b.date).localeCompare(String(a.date))).slice(0,40)};
+let seenKeys=null;
+function bellCheck(){const bl=bellList();const un=bl.filter((e)=>!e.read);$('bell-n').hidden=!un.length;$('bell-n').textContent=un.length>99?'99+':un.length;
+ if(seenKeys){const fresh=un.filter((e)=>!seenKeys.has(e.key));if(fresh.length)banner(fresh)}seenKeys=new Set(S.feed.map((e)=>e.key))}
+let bnT;function banner(list){document.querySelectorAll('.banner').forEach((x)=>x.remove());const e=list[0];const b=el('div','banner');const ic=el('div','ic');ic.innerHTML=$('b-bell').querySelector('svg').outerHTML;
+ const tx=el('div','tx');tx.append(el('div','a',(KLONG[e.kind]||e.kind)+' · '+e.investor+(list.length>1?' · +'+(list.length-1)+' hoạt động khác':'')),el('div','b',e.kind==='ycbg'&&e.sub?e.sub:e.title));b.append(ic,tx);
+ b.onclick=()=>{b.remove();if(list.length>1)openBell();else{A.openUrl(e.url)}};document.body.append(b);clearTimeout(bnT);bnT=setTimeout(()=>b.remove(),7000)}
+function openBell(){const bg=el('div','sheet-bg');const sh=el('div','sheet');const h=el('div','sheet-h');h.append(el('h2',null,'Thông báo'));const x=el('button',null,'Đóng');x.type='button';h.append(x);
+ const body=el('div','sheet-b');const bl=bellList();
+ if(!bl.length)body.append(el('div','hint',S.follows.length?'Chưa có thông báo mới. Khi bệnh viện đang theo dõi đăng báo giá, TBMT/HSMT, mở thầu hoặc có KQLCNT, thông báo sẽ hiện ở đây.':'Hãy theo dõi ít nhất một bệnh viện để nhận thông báo.'));
+ bl.forEach((e)=>{const r=el('div','nt'+(e.read?'':' new'));const tx=el('div','tx');const l1=el('div','l1');l1.append(el('span','kind k-'+e.kind,KIND[e.kind]||e.kind),el('span','inv',e.investor),el('span',null,e.at?ago(e.at):(pd(e.date)?hm(pd(e.date))+' '+dm(pd(e.date)):'')));
+  tx.append(l1,el('div','t',e.kind==='ycbg'&&e.sub?e.sub:e.title));const g=el('div','go');g.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>';r.append(tx,g);r.onclick=()=>A.openUrl(e.url);body.append(r)});
+ sh.append(h,body);const close=()=>{bg.remove();sh.remove();load()};x.onclick=close;bg.onclick=close;document.body.append(bg,sh);
+ if(bl.some((e)=>!e.read)){A.markRead();S.feed.forEach((e)=>{e.read=true});$('bell-n').hidden=true}}
+$('b-bell').onclick=()=>{if(A)openBell()};
+function render(){bellCheck();
  $('t-st').textContent=(S.follows.length?'Theo dõi '+S.follows.length+' đơn vị · ':'')+'kiểm tra '+ago(S.lastCheck)+(S.lastError?' · lỗi: '+S.lastError:'');
  if(view==='feed')drawFeed();if(view==='follow')drawFollow();if(view==='set')drawSet()}
 
@@ -192,7 +242,7 @@ function drawFeed(){
  const orgs=S.follows;$('f-org').hidden=orgs.length<2;
  $('f-org').replaceChildren(...[{code:'',name:'Mọi đơn vị'}].concat(orgs).map((o)=>{const b=el('button','chip',o.code?o.name.replace(/^Bệnh viện /,'BV ').replace(/^Trung tâm y tế /i,'TTYT '):o.name);b.type='button';b.setAttribute('aria-pressed',String(fo===o.code));b.onclick=()=>{fo=o.code;drawFeed()};return b}));
  const box=$('feed');
- if(!S.follows.length){box.replaceChildren(emptyBox('Chưa theo dõi bệnh viện nào','Follow các bệnh viện anh quan tâm, app sẽ báo khi họ đăng báo giá, TBMT/HSMT, mở thầu hoặc có kết quả lựa chọn nhà thầu.','Tìm bệnh viện để theo dõi',()=>go('follow')));return}
+ if(!S.follows.length){box.replaceChildren(emptyBox('Chưa theo dõi bệnh viện nào','Follow các bệnh viện anh quan tâm, app sẽ báo khi họ đăng báo giá, TBMT/HSMT, mở thầu hoặc có kết quả lựa chọn nhà thầu.','Tìm bệnh viện để theo dõi',()=>{go('follow');setAdd(true)}));return}
  const list=S.feed.filter((e)=>(!fk||e.kind===fk)&&(!fo||e.code===fo));
  if(!list.length){box.replaceChildren(emptyBox('Chưa có hoạt động','Trong 14 ngày gần đây chưa thấy hoạt động phù hợp. App sẽ tự kiểm tra và báo khi có mới.'));return}
  const out=[];let last='';
@@ -221,9 +271,12 @@ function orgRow(o,mode){const r=el('div','org');r.append(el('div','av',ini(o.nam
   b.disabled=true;b.textContent='Đang lấy dữ liệu…';const r=await call('follow',o.code,o.name);b.disabled=false;
   if(r&&r.error){toast('Không lấy được dữ liệu: '+r.error,true);}else toast('Đã theo dõi '+o.name+(r&&r.history?' · '+r.history+' hoạt động 14 ngày qua đã vào bảng tin':''));load();setB(S.follows.some((f)=>f.code===o.code))};
  r.append(b);return r}
-function drawFollow(){$('n-fl').textContent=S.follows.length?'('+S.follows.length+')':'';
- $('fl').replaceChildren(...(S.follows.length?S.follows.map((o)=>orgRow(o,'fl')):[el('div','hint','Chưa có đơn vị nào. Tìm và bấm "Theo dõi" ở trên.')]));
- if(lastRes)$('res').replaceChildren(...lastRes)}
+let addMode=false;
+function setAdd(on){addMode=on;$('fl-list').hidden=on;$('fl-add').hidden=!on;$('t-title').textContent=on?'Thêm bệnh viện':TITLES.follow;
+ if(!on){$('q').value='';lastRes=null;$('res').replaceChildren()}else setTimeout(()=>$('q').focus(),50);window.scrollTo({top:0});if(!on)drawFollow()}
+function drawFollow(){if(addMode)return;$('n-fl').textContent=S.follows.length?'('+S.follows.length+')':'';
+ $('fl').replaceChildren(...(S.follows.length?S.follows.map((o)=>orgRow(o,'fl')):[el('div','hint','Chưa theo dõi đơn vị nào. Bấm "Thêm bệnh viện" để tìm và theo dõi.')]))}
+$('b-add').onclick=()=>setAdd(true);$('b-done').onclick=()=>setAdd(false);
 let toastT;function toast(t,err){let m=$('toast');if(!m){m=el('div');m.id='toast';m.style.cssText='position:fixed;left:16px;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:9';document.body.append(m)}m.className='msg'+(err?' err':'');m.textContent=t;m.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{m.hidden=true},3500)}
 async function doSearch(){const q=$('q').value.trim();if(q.length<2)return;$('q').blur();$('res').replaceChildren(el('div','msg','Đang tìm “'+q+'” trên muasamcong…'));
  const r=await call('search',q);if(r.error){$('res').replaceChildren(el('div','msg err','Lỗi: '+r.error));return}
@@ -245,18 +298,23 @@ $('b-notif').onclick=()=>{A.askNotif();setTimeout(load,2500)};
 
 /* ĐIỀU HƯỚNG */
 const TITLES={feed:'Bảng tin',follow:'Theo dõi bệnh viện',set:'Cài đặt'};
-function go(v){if(v==='web'){location.href='./';return}
- if(view==='feed'&&v!=='feed'&&S.feed.some((e)=>!e.read)){A.markRead();S.feed.forEach((e)=>{e.read=true})}
- view=v;document.querySelectorAll('nav button').forEach((b)=>b.setAttribute('aria-selected',String(b.dataset.v===v)));['feed','follow','set'].forEach((x)=>{$('v-'+x).hidden=x!==v});$('t-title').textContent=TITLES[v];try{sessionStorage.setItem('v',v)}catch(e){}window.scrollTo({top:0});render()}
+let fr=null;
+function go(v){
+ if(v==='web'){if(view==='web'&&fr){fr.src='./?r='+Date.now();toast('Đang tải lại dữ liệu thầu XN…');return}if(!fr){fr=el('iframe');fr.src='./';fr.title='Thầu XN';$('v-web2').append(fr)}}
+ if(view==='follow'&&v!=='follow'&&addMode)setAdd(false);
+ view=v;document.body.classList.toggle('webtab',v==='web');document.querySelectorAll('nav button').forEach((b)=>b.setAttribute('aria-selected',String(b.dataset.v===v)));['feed','follow','set'].forEach((x)=>{$('v-'+x).hidden=x!==v});$('v-web2').hidden=v!=='web';if(TITLES[v])$('t-title').textContent=TITLES[v];try{sessionStorage.setItem('v',v)}catch(e){}if(v!=='web')window.scrollTo({top:0});render()}
 document.querySelectorAll('nav button').forEach((b)=>b.onclick=()=>go(b.dataset.v));
 $('b-check').onclick=async()=>{if(!A)return;const b=$('b-check');if(b.classList.contains('spin'))return;if(!S.follows.length){go('follow');return}b.classList.add('spin');const r=await call('check');b.classList.remove('spin');load();
  toast(r.n<0?'Không kiểm tra được: '+(r.error||'lỗi mạng'):r.n?r.n+' hoạt động mới':'Chưa có hoạt động mới',r.n<0)};
-window.DT_RESUME=load;
+/* Khi đang mở app: tự kiểm tra 3 phút/lần để báo gần như ngay lập tức */
+let checking=false;
+async function autoCheck(){if(!A||checking||document.hidden||!S.follows.length)return;if(Date.now()-(S.lastCheck||0)<3*60e3)return;checking=true;$('b-check').classList.add('spin');try{await call('check')}catch(e){}checking=false;$('b-check').classList.remove('spin');load()}
+window.DT_RESUME=()=>{load();autoCheck()};
 /* Báo có bản app mới */
 if(A&&A.version)fetch('app/version.json?v='+Date.now()).then((r)=>r.json()).then((v)=>{const cur=String(A.version()).split('.').map(Number),nw=String(v.version).split('.').map(Number);
  const newer=nw.some((x,i)=>x>(cur[i]||0)&&nw.slice(0,i).every((y,j)=>y===(cur[j]||0)));if(!newer)return;const m=el('div','msg');m.style.margin='10px 16px 0';m.append('Có bản app mới '+v.version+(v.note?': '+v.note:'')+' ');const a=el('a',null,'Tải về');a.href='app/dauthau.apk';a.style.fontWeight='700';a.onclick=(e)=>{e.preventDefault();A.openUrl(location.origin+'/app/dauthau.apk')};m.append(a);document.querySelector('.top').after(m)}).catch(()=>{});
-if(A){$('nav').hidden=false;let v='feed';try{v=sessionStorage.getItem('v')||'feed'}catch(e){}load();go(v);setInterval(()=>{if(!document.hidden)load()},60000)}
-else{$('v-web').hidden=false;$('b-check').hidden=true;$('t-st').textContent='Theo dõi bệnh viện, nhận thông báo đấu thầu'}
+if(A){$('nav').hidden=false;let v='feed';try{v=sessionStorage.getItem('v')||'feed'}catch(e){}load();go(v==='web'?'feed':v);setInterval(()=>{if(!document.hidden){load();autoCheck()}},60000);setTimeout(autoCheck,1500)}
+else{$('v-web').hidden=false;$('b-check').hidden=true;$('b-bell').hidden=true;$('t-st').textContent='Theo dõi bệnh viện, nhận thông báo đấu thầu'}
 </script>
 </body>
 </html>
