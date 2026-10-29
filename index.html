@@ -389,7 +389,7 @@ const nhOf=(r)=>{if(r._nh)return r._nh;const t=[r.name,...(r.goods||[]).map((g)=
 const nhChips=(box,tags,sel)=>tags.forEach((t)=>{const c=el('span','nh',t);c.title='Lọc theo nhãn '+t;c.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();const f=$(sel);if(![...f.options].some((o)=>o.value===t))f.append(new Option(t,t));f.value=t;f.dispatchEvent(new Event('change'))});box.append(c)});
 const nhPass=(r,v)=>!v||(v==='#match'?!!(D.match||{})[r.notifyNo]:v==='*'?nhOf(r).length>0:nhOf(r).includes(v));
 /* Đối chiếu YCKT với thiết bị đang cung cấp */
-function ctName(td,r){td.classList.add('ctl');td.title='Xem chi tiết gói thầu';td.addEventListener('click',(e)=>{if(e.target.closest('a,.mt,.nh'))return;const x=typeof DT==='function'?DT(r):{};window.CT&&CT.open(r.notifyNo,{ten:r.name,bmt:r.investor,gia:x.budget||r.budget,tg:x.period,dang:x.publicAt,dong:x.closeFull||r.closeAt,ch5:x.ch5,goods:r.goods,hinhthuc:formOf(r)})});return td}
+function ctName(td,r){td.classList.add('ctl');td.title='Xem chi tiết gói thầu';td.addEventListener('click',(e)=>{if(e.target.closest('a,.mt,.nh'))return;const x=typeof DT==='function'?DT(r):{};const lk=String(r.lk||'').split('|');window.CT&&CT.open(r.notifyNo,{id:lk[0]||'',ir:lk[1]||'',loai:lk[2]==='YCBG'?'ycbg':'tbmt',ten:r.name,bmt:r.investor,gia:x.budget||r.budget,tg:x.period,dang:x.publicAt,dong:x.closeFull||r.closeAt,ch5:x.ch5,goods:r.goods,hinhthuc:lk[2]==='YCBG'?'':formOf(r)})});return td}
 const rcls=(x)=>x>=80?'r-hi':x>=60?'r-md':'r-lo';
 const GEAR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>';
 function mtChips(td,r){const m=(D.match||{})[r.notifyNo];if(!m)return;m.items.forEach((it,i)=>{const b=it.models[0];if(!b)return;const c=el('span','mt '+rcls(b.rate));c.innerHTML=GEAR;c.append(b.model+' · '+b.rate+'%');c.title='Đối chiếu YCKT "'+it.item+'" với '+b.model+': đạt '+b.ok+', không đạt '+b.no+', chưa rõ '+b.unk+'. Bấm để xem chi tiết';c.addEventListener('click',(e)=>{e.stopPropagation();openMatch(r,i)});td.append(c)})}
@@ -506,7 +506,7 @@ const FW=(()=>{
  const short=(n)=>n.replace(/^Bệnh viện /i,'BV ').replace(/^Trung tâm y tế /i,'TTYT ').replace(/^Trung tâm kiểm soát bệnh tật /i,'CDC ');
  const ini=(n)=>{const w=n.replace(/^(Bệnh viện|Trung tâm|Viện|Sở|Phòng khám)\s+/i,'').split(/\s+/).filter(Boolean);return((w[0]||'?')[0]+((w[1]||'')[0]||'')).toUpperCase()};
  const toEv=(r)=>({kind:r[0],no:r[1],code:r[2],title:r[3],sub:r[4],date:r[5],close:r[6],form:r[7],id:r[8],ir:r[9],budget:r[10],winner:r[11],price:r[12],v:r[13],key:r[0]+':'+r[1]+':'+r[13]});
- const openCt=(e)=>window.CT?CT.open(e.no,{ten:e.title,bmt:nameOf(e.code),gia:e.budget,dang:e.kind==='kq'?'':e.date,dong:e.close}):window.open(linkOf(e.no,lkOf(e)).href,'_blank','noopener');
+ const openCt=(e)=>window.CT?CT.open(e.no,{id:e.id,ir:e.kind==='kq'?e.ir:'',hinhthuc:e.form,loai:e.kind==='ycbg'?'ycbg':'tbmt',ten:e.title,bmt:nameOf(e.code),gia:e.budget,dang:e.kind==='kq'?'':e.date,dong:e.close}):window.open(linkOf(e.no,lkOf(e)).href,'_blank','noopener');
  const lkOf=(e)=>e.kind==='ycbg'?(e.id+'||YCBG'):(e.id+'|'+(e.kind==='kq'?e.ir:'')+'|'+e.form);
  const j=(u)=>fetch(u+(u.includes('?')?'&':'?')+'v='+Date.now()).then((r)=>r.ok?r.json():null).catch(()=>null);
  async function loadMeta(){meta=await j('data/hd/meta.json');return meta}
@@ -520,7 +520,7 @@ const FW=(()=>{
   add('Mã',e.no);if(e.kind==='ycbg'&&e.sub&&e.sub!==e.title)add('Dự toán',e.title);const cl=pd(e.close);if(cl&&(e.kind==='ycbg'||e.kind==='tbmt'))add(e.kind==='ycbg'?'Hạn báo giá':'Đóng thầu',hm(cl)+' '+dm(cl));if(e.budget&&e.kind!=='kq')add('Giá gói',fmt(e.budget));c.append(m);
   if(e.kind==='kq'&&(e.winner||e.price)){const w=el('div','wn');w.textContent=(e.winner?'Trúng: '+e.winner:'')+(e.price?(e.winner?' · ':'')+'Giá trúng '+fmt(e.price)+' đ':'');c.append(w)}
   if((D.match||{})[e.no]){const box=el('div');box.style.marginTop='6px';mtChips(box,{notifyNo:e.no,investor:nameOf(e.code)});c.append(box)}
-  if(e.kind==='ycbg'&&window.CT){const q=el('button','qdl','⬇ Tải file báo giá');q.type='button';q.addEventListener('click',(x)=>{x.stopPropagation();CT.quick(e.no,q,{ten:e.title,bmt:nameOf(e.code),dang:e.date,dong:e.close})});c.append(q)}
+  if(e.kind==='ycbg'&&window.CT){const q=el('button','qdl','⬇ Tải file báo giá');q.type='button';q.addEventListener('click',(x)=>{x.stopPropagation();CT.quick(e.no,q,{id:e.id,hinhthuc:e.form,loai:'ycbg',ten:e.title,bmt:nameOf(e.code),dang:e.date,dong:e.close})});c.append(q)}
   c.addEventListener('click',(x)=>{if(x.target.closest('.mt,.qdl'))return;openCt(e)});return c}
  function draw(){status();badge();if(add)return;
   const orgs=$('fw-orgs');orgs.replaceChildren(...(follows.length>1?[{code:'',name:'Mọi đơn vị'}]:[]).concat(follows).map((o)=>{const b=el('button','fchip');b.type='button';b.setAttribute('aria-pressed',String(fo===o.code));b.append(o.code?short(o.name):o.name);

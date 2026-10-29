@@ -209,7 +209,8 @@ let S={follows:[],feed:[],prefs:{}},view='feed',fk='',fo='';
 const CBS={};let cbn=0;
 window.DT_CB=(id,d)=>{const f=CBS[id];delete CBS[id];if(f)f(d)};
 const call=(fn,...a)=>new Promise((res)=>{const id='c'+(++cbn);CBS[id]=res;A[fn](...a,id)});
-const openCt=(e)=>window.CT?CT.open(e.no,{ten:e.title,bmt:e.investor,gia:e.budget,dang:e.kind==='kq'?'':e.date,dong:e.close}):A.openUrl(e.url);
+const urlParts=(u)=>{try{const p=new URL(u).searchParams;return{id:p.get('id')||'',ir:(p.get('inputResultId')||'').replace('undefined',''),hinhthuc:p.get('bidForm')||''}}catch(x){return{}}};
+const openCt=(e)=>window.CT?CT.open(e.no,Object.assign(urlParts(e.url),{loai:e.kind==='ycbg'?'ycbg':'tbmt',ten:e.title,bmt:e.investor,gia:e.budget,dang:e.kind==='kq'?'':e.date,dong:e.close})):A.openUrl(e.url);
 const fmtN=(v)=>Number(v).toLocaleString('vi-VN');
 const pd=(s)=>{if(!s)return null;const m=/^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)/.exec(s);return m?new Date(+m[1],m[2]-1,+m[3],+m[4],+m[5]):null};
 const hm=(d)=>String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
@@ -259,7 +260,7 @@ function card(e,d){const c=el('div','ev'+(e.read?'':' new'));
  add('Mã',e.no);const cl=pd(e.close);if(cl&&(e.kind==='ycbg'||e.kind==='tbmt'))add(e.kind==='ycbg'?'Hạn báo giá':'Đóng thầu',hm(cl)+' '+dm(cl));
  if(e.budget&&e.kind!=='kq')add('Giá gói',fmtN(e.budget));c.append(m);
  if(e.kind==='kq'&&(e.winner||e.price)){const w=el('div','win');if(e.winner)w.append('Trúng: ',Object.assign(el('b'),{textContent:e.winner}));if(e.price)w.append(e.winner?' · ':'','Giá trúng ',Object.assign(el('b'),{textContent:fmtN(e.price)+' đ'}));c.append(w)}
- if(e.kind==='ycbg'&&window.CT){const q=el('button','qdl','⬇ Tải file báo giá');q.type='button';q.onclick=(x)=>{x.stopPropagation();CT.quick(e.no,q,{ten:e.title,bmt:e.investor,dang:e.date,dong:e.close})};c.append(q)}
+ if(e.kind==='ycbg'&&window.CT){const q=el('button','qdl','⬇ Tải file báo giá');q.type='button';q.onclick=(x)=>{x.stopPropagation();CT.quick(e.no,q,Object.assign(urlParts(e.url),{loai:'ycbg',ten:e.title,bmt:e.investor,dang:e.date,dong:e.close}))};c.append(q)}
  c.onclick=()=>openCt(e);return c}
 function emptyBox(t,p,btn,fn){const d=el('div','empty');const b=el('div','big');b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>';d.append(b,el('h3',null,t),el('p',null,p));if(btn){const x=el('button','btn',btn);x.type='button';x.onclick=fn;d.append(x)}return d}
 
@@ -316,7 +317,7 @@ async function autoCheck(){if(!A||checking||document.hidden||!S.follows.length)r
 window.DT_RESUME=()=>{load();autoCheck()};
 /* Mở từ thông báo đẩy của app */
 window.DT_OPEN=(no)=>{load();const e=S.feed.find((x)=>x.no===no);if(view!=='feed')go('feed');if(e&&!e.read){A.markRead();S.feed.forEach((x)=>{x.read=true});render()}
- if(window.CT)CT.open(no,e?{ten:e.title,bmt:e.investor,gia:e.budget,dang:e.kind==='kq'?'':e.date,dong:e.close}:{});else if(e)A.openUrl(e.url)};
+ if(window.CT)CT.open(no,e?Object.assign(urlParts(e.url),{loai:e.kind==='ycbg'?'ycbg':'tbmt',ten:e.title,bmt:e.investor,gia:e.budget,dang:e.kind==='kq'?'':e.date,dong:e.close}):{});else if(e)A.openUrl(e.url)};
 window.DT_BELL=()=>{load();if(view!=='feed')go('feed');openBell()};
 /* Báo có bản app mới */
 if(A&&A.version)fetch('app/version.json?v='+Date.now()).then((r)=>r.json()).then((v)=>{const cur=String(A.version()).split('.').map(Number),nw=String(v.version).split('.').map(Number);

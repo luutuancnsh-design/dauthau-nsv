@@ -71,7 +71,7 @@ table.ctt td.n{text-align:right;white-space:nowrap}
     const head = E('div', 'ct-h'), r1 = E('div', 'r1');
     r1.append(E('span', 'bdg', yc ? 'Yêu cầu báo giá' : (d.kq ? 'Đã có KQLCNT' : 'Thông báo mời thầu')));
     if (d.kq && d.kq.huy) r1.append(E('span', 'bdg red', 'Hủy thầu'));
-    const a = E('a', 'no', no); a.href = msc(no, d); a.target = '_blank'; a.rel = 'noopener'; a.title = 'Mở trên muasamcong';
+    const a = E('a', 'no', no); a.href = msc(no, Object.assign({}, h, d)); a.target = '_blank'; a.rel = 'noopener'; a.title = 'Mở trên muasamcong';
     a.addEventListener('click', (e) => { e.preventDefault(); openExt(a.href); });
     r1.append(a);
     const x = E('button', 'x', 'Đóng'); x.type = 'button'; r1.append(x); head.append(r1, E('h3', null, ten), E('div', 'ct-inv', d.bmt || h.bmt || ''));
@@ -148,7 +148,7 @@ table.ctt td.n{text-align:right;white-space:nowrap}
       body.append(s);
     }
 
-    const go = E('div', 'ct-sec'); const b = E('a', 'ct-go', 'Mở gói ' + no + ' trên muasamcong'); b.href = msc(no, d); b.target = '_blank'; b.rel = 'noopener';
+    const go = E('div', 'ct-sec'); const b = E('a', 'ct-go', 'Mở gói ' + no + ' trên muasamcong'); b.href = msc(no, Object.assign({}, h, d)); b.target = '_blank'; b.rel = 'noopener';
     b.addEventListener('click', (e) => { e.preventDefault(); openExt(b.href); });
     go.append(b); if (d.u) go.append(E('div', 'ct-note', 'Dữ liệu lấy từ muasamcong lúc ' + T(d.u) + '.')); body.append(go);
     box.replaceChildren(head, body);
