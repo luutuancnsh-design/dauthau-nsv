@@ -32,11 +32,16 @@ table.ctt td.n{text-align:right;white-space:nowrap}
 .ct-spec pre{white-space:pre-wrap;font:inherit;font-size:.78rem;background:var(--panel2,#f8faf9);border-radius:8px;padding:8px;margin:6px 0 0;max-height:320px;overflow:auto}
 .ct-win{color:#15803d;font-weight:700}.ct-lose{color:#be123c;font-weight:700}
 .ct-note{font-size:.8rem;color:var(--muted,#5d6b68);margin-top:6px}
+.ct-mt-lot{margin-top:10px}.ct-mt-lot>summary{cursor:pointer;font-weight:600;font-size:.84rem;padding:4px 0}
+.ct-mt-lot>summary .c{color:var(--muted,#5d6b68);font-weight:500}
+.ct-low{display:inline-block;background:#dcfce7;color:#15803d;border-radius:6px;padding:0 6px;font-size:.7rem;font-weight:700;margin-left:6px}
+.ct-ld{display:block;font-size:.72rem;color:var(--muted,#5d6b68)}
+td.dlt{color:var(--muted,#5d6b68);font-size:.78rem}
 .ct-warn{background:#fde8ec;color:#9f1239;border-radius:10px;padding:10px 12px;font-weight:600}
 .ct-info{background:var(--accentbg,#e6f4f2);border-radius:10px;padding:10px 12px;font-size:.85rem}
 .ct-go{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:11px;padding:9px 14px;background:var(--accent,#0f766e);color:#fff;font-weight:600;text-decoration:none;font-size:.86rem}
 @media (max-width:720px){.ctbg{padding:0}.ct{border-radius:0;min-height:100%}.ct-b{padding:4px 14px 20px}table.ctt{font-size:.78rem}}
-@media (prefers-color-scheme:dark){.ct-warn{background:#3b1a22;color:#fecdd3}.ct-win{color:#7ddc9c}.ct-lose{color:#fb7185}}`;
+@media (prefers-color-scheme:dark){.ct-low{background:#14532d;color:#bbf7d0}.ct-warn{background:#3b1a22;color:#fecdd3}.ct-win{color:#7ddc9c}.ct-lose{color:#fb7185}}`;
   const st = document.createElement('style'); st.textContent = CSS; document.head.append(st);
 
   const HT = { DTRR: 'Đấu thầu rộng rãi', DTHC: 'Đấu thầu hạn chế', CHCT: 'Chào hàng cạnh tranh', CHCTRG: 'Chào hàng cạnh tranh rút gọn', CGTTRG: 'Chào giá trực tuyến rút gọn', CDTRG: 'Chỉ định thầu rút gọn', CDT: 'Chỉ định thầu', MSTT: 'Mua sắm trực tiếp', TTH: 'Tự thực hiện', HHDVK: 'Hàng hóa, dịch vụ khác', THUOC: 'Thuốc' };
@@ -64,12 +69,57 @@ table.ctt td.n{text-align:right;white-space:nowrap}
   function sec(title) { const s = E('div', 'ct-sec'); s.append(E('h4', null, title)); return s; }
   function specCell(td, spec) { if (!spec) return; const d = E('details', 'ct-spec'); d.append(E('summary', null, 'Xem yêu cầu kỹ thuật'), E('pre', null, spec)); td.append(d); }
 
+  /* Kết quả mở thầu: danh sách nhà thầu nộp HSDT và giá dự thầu (ds: [phần/lô, nhà thầu, liên danh, giá dự thầu, giảm giá %, giá sau giảm, hiệu lực, bảo đảm, số lần chào]) */
+  function mtSec(body, d) {
+    const m = d.mt || {}, ds = m.ds || [];
+    const s = sec('Kết quả mở thầu' + (m.n ? ' · ' + m.n + ' nhà thầu' : '') + (m.at ? ' · mở ' + T(m.at) : ''));
+    if (!ds.length) { s.append(E('div', 'ct-note', 'Không có nhà thầu nộp hồ sơ hoặc chưa công khai biên bản mở thầu.')); body.append(s); return; }
+    const groups = new Map(); ds.forEach((r) => { const k = r[0] || ''; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r); });
+    const hasDisc = ds.some((r) => Number(r[4]) > 0 || (Number(r[3]) && Number(r[5]) && Number(r[3]) !== Number(r[5])));
+    const hasHl = ds.some((r) => Number(r[6]) > 0 || Number(r[7]) > 0), hasLan = ds.some((r) => Number(r[8]) > 1);
+    const pct = (a, b) => (a && b) ? ((a - b) / b * 100) : null;
+    const table = (rows) => {
+      rows = rows.slice().sort((a, b) => (Number(a[5]) || 9e18) - (Number(b[5]) || 9e18));
+      const low = Number(rows[0][5]) || 0;
+      const tw = E('div', 'ct-tw'), t = E('table', 'ctt'); t.style.marginTop = '6px';
+      t.innerHTML = '<thead><tr><th class="n">#</th><th>Nhà thầu</th><th class="n">Giá dự thầu</th>' + (hasDisc ? '<th class="n">Giảm giá</th><th class="n">Giá sau giảm</th>' : '') + '<th class="n">So với thấp nhất</th>' + (hasHl ? '<th class="n">Hiệu lực HSDT</th><th class="n">Bảo đảm dự thầu</th>' : '') + (hasLan ? '<th class="n">Lần chào</th>' : '') + '</tr></thead>';
+      const tb = E('tbody');
+      rows.forEach((r, i) => {
+        const tr = E('tr'); const n = E('td', null, r[1] || ''); if (i === 0 && rows.length > 1) n.append(E('span', 'ct-low', 'Thấp nhất'));
+        if (r[2] && r[2] !== r[1]) n.append(E('span', 'ct-ld', 'Liên danh: ' + r[2]));
+        tr.append(E('td', 'n', String(i + 1)), n, E('td', 'n', N(r[3])));
+        if (hasDisc) tr.append(E('td', 'n', Number(r[4]) ? (Number(r[4]).toLocaleString('vi-VN') + '%') : ''), E('td', 'n', N(r[5])));
+        const p = i ? pct(Number(r[5]), low) : null; tr.append(E('td', 'n dlt', p === null ? '' : '+' + p.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + '%'));
+        if (hasHl) tr.append(E('td', 'n', Number(r[6]) ? r[6] + ' ngày' : ''), E('td', 'n', N(r[7])));
+        if (hasLan) tr.append(E('td', 'n', r[8] ? String(r[8]) : ''));
+        tb.append(tr);
+      });
+      t.append(tb); tw.append(t); return tw;
+    };
+    if (groups.size <= 1) {
+      const rows = [...groups.values()][0];
+      const g = Number(d.gia) || 0, low = Math.min(...rows.map((r) => Number(r[5]) || 9e18));
+      if (g && low < 9e18) { const p = pct(low, g); s.append(E('div', 'ct-note', 'Giá thấp nhất ' + N(low) + ' đ, ' + (p <= 0 ? 'thấp hơn giá gói ' + Math.abs(p).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + '%' : 'cao hơn giá gói ' + p.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + '%') + '.')); }
+      s.append(table(rows));
+    } else {
+      s.append(E('div', 'ct-note', groups.size + ' phần/lô. Bấm từng phần để xem nhà thầu và giá dự thầu, sắp theo giá thấp nhất.'));
+      let i = 0;
+      groups.forEach((rows, lot) => {
+        const dt = E('details', 'ct-mt-lot'); if (i++ < 3) dt.open = true;
+        const sm = E('summary', null, lot || '(Không rõ phần)'); const low = Math.min(...rows.map((r) => Number(r[5]) || 9e18));
+        sm.append(E('span', 'c', ' · ' + rows.length + ' nhà thầu' + (low < 9e18 ? ' · thấp nhất ' + N(low) + ' đ' : ''))); dt.append(sm, table(rows)); s.append(dt);
+      });
+    }
+    s.append(E('div', 'ct-note', 'Nguồn: biên bản mở thầu / kết quả chào giá trên muasamcong' + (m.u ? ', lấy lúc ' + T(m.u) : '') + '. Giá dự thầu chưa phải giá trúng thầu.'));
+    body.append(s);
+  }
+
   function render(box, no, d, h) {
     d = d || {}; h = h || {};
     const yc = d.loai === 'ycbg' || /^RQ/.test(no);
     const ten = (yc && d.ten_yc) ? d.ten_yc : (d.ten || h.ten || '');
     const head = E('div', 'ct-h'), r1 = E('div', 'r1');
-    r1.append(E('span', 'bdg', yc ? 'Yêu cầu báo giá' : (d.kq ? 'Đã có KQLCNT' : 'Thông báo mời thầu')));
+    r1.append(E('span', 'bdg', yc ? 'Yêu cầu báo giá' : (d.kq ? 'Đã có KQLCNT' : (d.mt && d.mt.n ? 'Đã mở thầu' : 'Thông báo mời thầu'))));
     if (d.kq && d.kq.huy) r1.append(E('span', 'bdg red', 'Hủy thầu'));
     const a = E('a', 'no', no); a.href = msc(no, Object.assign({}, h, d)); a.target = '_blank'; a.rel = 'noopener'; a.title = 'Mở trên muasamcong';
     a.addEventListener('click', (e) => { e.preventDefault(); openExt(a.href); });
@@ -124,6 +174,8 @@ table.ctt td.n{text-align:right;white-space:nowrap}
       const tb = E('tbody'); h.goods.forEach((r) => { const tr = E('tr'); tr.append(E('td', null, r.item), E('td', null, [r.model, r.kmh].filter(Boolean).join(' / ')), E('td', null, [r.hang, r.xuatxu].filter(Boolean).join(' · ')), E('td', 'n', N(r.sl)), E('td', 'n', N(r.dongia)), E('td', null, r.winner || '')); tb.append(tr); });
       t.append(tb); tw.append(t); s.append(tw); body.append(s);
     }
+
+    if (d.mt) mtSec(body, d);
 
     if (d.kq) {
       const k = d.kq, s = sec('Kết quả lựa chọn nhà thầu' + (k.ngay ? ' · đăng ' + T(k.ngay) : ''));
